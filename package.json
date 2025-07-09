@@ -1,0 +1,28 @@
+{
+  "name": "allaboutdevpatel.com",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "install-all": "npm install --prefix backend && npm install --prefix frontend",
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "npm start --prefix backend",
+    "client": "npm start --prefix frontend",
+    "build": "npm run build --prefix frontend"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DevPatel47/allaboutdevpatel.com.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DevPatel47/allaboutdevpatel.com/issues"
+  },
+  "homepage": "https://github.com/DevPatel47/allaboutdevpatel.com#readme",
+  "devDependencies": {
+    "concurrently": "^9.2.0"
+  }
+}
