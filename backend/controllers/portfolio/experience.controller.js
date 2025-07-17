@@ -43,7 +43,7 @@ const createExperience = asyncHandler(async (req, res) => {
     }
 
     // Only allow the user themselves or an admin to create
-    if (userId !== req.user._id) {
+    if (userId.toString() !== req.user._id.toString()) {
         return res
             .status(403)
             .json(new ApiError(403, 'You are not authorized to create this experience'));
@@ -253,8 +253,8 @@ const deleteExperience = asyncHandler(async (req, res) => {
         return res.status(404).json(new ApiError(404, 'Experience not found'));
     }
 
-    // Only allow the user themselves or an admin to delete
-    if (experience.userId.toString() !== req.user._id.toString() && !req.user.isAdmin) {
+    // Only allow the user themselves
+    if (experience.userId.toString() !== req.user._id.toString()) {
         return res
             .status(403)
             .json(new ApiError(403, 'You are not authorized to delete this experience'));
