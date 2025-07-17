@@ -71,9 +71,11 @@ const createIntroduction = asyncHandler(async (req, res) => {
         return res.status(500).json(new ApiError(500, 'Failed to create introduction'));
     }
 
-    return res
-        .status(201)
-        .json(new ApiResponse(201, 'Introduction created successfully', newIntroduction));
+    return res.status(201).json(
+        new ApiResponse(201, 'Introduction created successfully', {
+            introduction: newIntroduction,
+        }),
+    );
 });
 
 /**
@@ -93,9 +95,11 @@ const getIntroduction = asyncHandler(async (req, res) => {
         return res.status(404).json(new ApiError(404, 'Introduction not found for this user'));
     }
 
-    return res
-        .status(200)
-        .json(new ApiResponse(200, 'Introduction retrieved successfully', introduction));
+    return res.status(200).json(
+        new ApiResponse(200, 'Introduction retrieved successfully', {
+            introduction: introduction,
+        }),
+    );
 });
 
 /**
@@ -173,9 +177,11 @@ const updateIntroduction = asyncHandler(async (req, res) => {
         await deleteFromCloudinary(oldResumeUrl);
     }
 
-    return res
-        .status(200)
-        .json(new ApiResponse(200, 'Introduction updated successfully', updatedIntroduction));
+    return res.status(200).json(
+        new ApiResponse(200, 'Introduction updated successfully', {
+            introduction: updatedIntroduction,
+        }),
+    );
 });
 
 /**
@@ -220,9 +226,11 @@ const deleteIntroduction = asyncHandler(async (req, res) => {
         await deleteFromCloudinary(oldResumeUrl);
     }
 
-    return res
-        .status(200)
-        .json(new ApiResponse(200, 'Introduction deleted successfully', deletedIntroduction));
+    return res.status(200).json(
+        new ApiResponse(200, 'Introduction deleted successfully', {
+            introduction: deletedIntroduction,
+        }),
+    );
 });
 
 // Export controller functions

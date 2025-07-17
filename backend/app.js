@@ -26,7 +26,7 @@ app.use(cookieParser());
 // Import your API route modules here
 import userRouter from './routes/common/user.routes.js';
 import introductionRouter from './routes/portfolio/introduction.routes.js';
-// import educationRouter from './routes/portfolio/education.routes.js';
+import educationRouter from './routes/portfolio/education.routes.js';
 // import experienceRouter from './routes/portfolio/experience.routes.js';
 // import skillRouter from './routes/portfolio/skill.routes.js';
 // import projectRouter from './routes/portfolio/project.routes.js';
@@ -39,7 +39,7 @@ import introductionRouter from './routes/portfolio/introduction.routes.js';
 // Register API routes with versioned prefixes
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/portfolio/introductions', introductionRouter);
-// app.use('/api/v1/portfolio/educations', educationRouter);
+app.use('/api/v1/portfolio/educations', educationRouter);
 // app.use('/api/v1/portfolio/experiences', experienceRouter);
 // app.use('/api/v1/portfolio/skills', skillRouter);
 // app.use('/api/v1/portfolio/projects', projectRouter);
