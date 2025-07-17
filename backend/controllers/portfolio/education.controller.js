@@ -13,13 +13,13 @@ import { ApiResponse } from '../../utils/ApiResponse.js';
  */
 const createEducation = asyncHandler(async (req, res) => {
     const { userId } = req.params;
-    const institution = req.body.institution?.trim();
-    const degree = req.body.degree?.trim();
-    const fieldOfStudy = req.body.fieldOfStudy?.trim();
-    const startDate = req.body.startDate;
-    const endDate = req.body.endDate;
-    const grade = req.body.grade?.trim();
-    const description = req.body.description?.trim();
+    const institution = req.body?.institution?.trim();
+    const degree = req.body?.degree?.trim();
+    const fieldOfStudy = req.body?.fieldOfStudy?.trim();
+    const startDate = req.body?.startDate;
+    const endDate = req.body?.endDate;
+    const grade = req.body?.grade?.trim();
+    const description = req.body?.description?.trim();
 
     // Validate required fields
     if (
@@ -35,8 +35,8 @@ const createEducation = asyncHandler(async (req, res) => {
         return res.status(400).json(new ApiError(400, 'All fields are required'));
     }
 
-    // Only allow the user themselves or an admin to create
-    if (userId !== req.user.id && !req.user.isAdmin) {
+    // Only allow the user themselves
+    if (userId.toString() !== req.user._id.toString()) {
         return res
             .status(403)
             .json(new ApiError(403, 'You are not authorized to create this education'));
@@ -140,13 +140,13 @@ const getEducationByEduId = asyncHandler(async (req, res) => {
  */
 const updateEducation = asyncHandler(async (req, res) => {
     const { educationId } = req.params;
-    const institution = req.body.institution?.trim();
-    const degree = req.body.degree?.trim();
-    const fieldOfStudy = req.body.fieldOfStudy?.trim();
-    const startDate = req.body.startDate;
-    const endDate = req.body.endDate;
-    const grade = req.body.grade?.trim();
-    const description = req.body.description?.trim();
+    const institution = req.body?.institution?.trim();
+    const degree = req.body?.degree?.trim();
+    const fieldOfStudy = req.body?.fieldOfStudy?.trim();
+    const startDate = req.body?.startDate;
+    const endDate = req.body?.endDate;
+    const grade = req.body?.grade?.trim();
+    const description = req.body?.description?.trim();
 
     // Validate required fields
     if (
@@ -168,10 +168,8 @@ const updateEducation = asyncHandler(async (req, res) => {
         return res.status(404).json(new ApiError(404, 'Education not found'));
     }
 
-    const userId = education.userId.toString();
-
     // Only allow the user themselves
-    if (userId != req.user._id.toString()) {
+    if (education.userId.toString() != req.user._id.toString()) {
         return res
             .status(403)
             .json(new ApiError(403, 'You are not authorized to update this education'));
@@ -238,16 +236,12 @@ const deleteEducation = asyncHandler(async (req, res) => {
         return res.status(404).json(new ApiError(404, 'Education not found'));
     }
 
-    const userId = education.userId.toString();
-
     // Only allow the user themselves
-    if (userId !== req.user._id.toString()) {
+    if (education.userId.toString() !== req.user._id.toString()) {
         return res
             .status(403)
             .json(new ApiError(403, 'You are not authorized to delete this education'));
     }
-
-    const oldLogoUrl = education.logo;
 
     // Delete the education
     const deletedEducation = await Education.findByIdAndDelete(educationId);

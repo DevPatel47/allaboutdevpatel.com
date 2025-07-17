@@ -16,6 +16,7 @@ import {
 import { upload } from '../../middlewares/multer.middleware.js';
 import { verifyJWT } from '../../middlewares/auth.middleware.js';
 import { verifyAdminStatus } from '../../middlewares/checkAdminStatus.middleware.js';
+import { verifyObjectId } from '../../middlewares/checkObjectId.middleware.js';
 
 const router = Router();
 
@@ -33,7 +34,7 @@ router.route('/retrieve').get(verifyJWT, verifyAdminStatus, getAllUsers);
  * @desc    Retrieve a user by their ID. Only accessible by admin.
  * @access  Private
  */
-router.route('/retrieve/:userId').get(verifyJWT, verifyAdminStatus, getUserById);
+router.route('/retrieve/:userId').get(verifyJWT, verifyAdminStatus, verifyObjectId, getUserById);
 
 /**
  * Register a new user.
@@ -65,6 +66,7 @@ router.route('/update/:userId').patch(
             maxCount: 1,
         },
     ]),
+    verifyObjectId,
     updateUser,
 );
 
@@ -82,7 +84,7 @@ router.route('/change-password').patch(verifyJWT, changeCurrentPassword);
  * @desc    Delete a user by their ID. Only accessible by admin.
  * @access  Private
  */
-router.route('/delete/:userId').delete(verifyJWT, verifyAdminStatus, deleteUser);
+router.route('/delete/:userId').delete(verifyJWT, verifyAdminStatus, verifyObjectId, deleteUser);
 
 /**
  * Delete the current authenticated user.
@@ -130,6 +132,8 @@ router.route('/current-user').get(verifyJWT, getCurrentUser);
  * @desc    Update a user's role (admin/user). Only accessible by admin.
  * @access  Private
  */
-router.route('/update-role/:userId').patch(verifyJWT, verifyAdminStatus, updateRole);
+router
+    .route('/update-role/:userId')
+    .patch(verifyJWT, verifyAdminStatus, verifyObjectId, updateRole);
 
 export default router;

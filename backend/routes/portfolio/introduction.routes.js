@@ -8,6 +8,7 @@ import {
 import { verifyJWT } from '../../middlewares/auth.middleware.js';
 import { upload } from '../../middlewares/multer.middleware.js';
 import { verifyAdminStatus } from '../../middlewares/checkAdminStatus.middleware.js';
+import { verifyObjectId } from '../../middlewares/checkObjectId.middleware.js';
 
 const router = Router();
 
@@ -26,6 +27,7 @@ router.post(
         { name: 'profileImage', maxCount: 1 },
         { name: 'resume', maxCount: 1 },
     ]),
+    verifyObjectId,
     createIntroduction,
 );
 
@@ -35,7 +37,7 @@ router.post(
  * @desc    Get the introduction for a user
  * @access  Public
  */
-router.get('/:userId', getIntroduction);
+router.get('/:userId', verifyObjectId, getIntroduction);
 
 /**
  * Updates the introduction for a user.
@@ -53,6 +55,7 @@ router.put(
         { name: 'profileImage', maxCount: 1 },
         { name: 'resume', maxCount: 1 },
     ]),
+    verifyObjectId,
     updateIntroduction,
 );
 
@@ -63,6 +66,6 @@ router.put(
  * @desc    Delete the introduction for a user (protected, only self/admin)
  * @access  Private
  */
-router.delete('/:userId', verifyJWT, verifyAdminStatus, deleteIntroduction);
+router.delete('/:userId', verifyJWT, verifyAdminStatus, verifyObjectId, deleteIntroduction);
 
 export default router;

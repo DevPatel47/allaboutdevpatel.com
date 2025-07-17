@@ -9,6 +9,7 @@ import {
 import { verifyJWT } from '../../middlewares/auth.middleware.js';
 import { verifyAdminStatus } from '../../middlewares/checkAdminStatus.middleware.js';
 import { upload } from '../../middlewares/multer.middleware.js';
+import { verifyObjectId } from '../../middlewares/checkObjectId.middleware.js';
 
 /**
  * Education Routes
@@ -33,6 +34,7 @@ router.post(
     verifyJWT,
     verifyAdminStatus,
     upload.fields([{ name: 'logo', maxCount: 1 }]),
+    verifyObjectId,
     createEducation,
 );
 
@@ -42,7 +44,7 @@ router.post(
  * @param {string} userId - User ID (in URL path)
  * @returns {Object[]} 200 - List of education entries
  */
-router.get('/byuserid/:userId', getEducationsByUserId);
+router.get('/byuserid/:userId', verifyObjectId, getEducationsByUserId);
 
 /**
  * Get a specific education entry by its ID
@@ -50,7 +52,7 @@ router.get('/byuserid/:userId', getEducationsByUserId);
  * @param {string} educationId - Education entry ID (in URL path)
  * @returns {Object} 200 - Education entry
  */
-router.get('/byeducationid/:educationId', getEducationByEduId);
+router.get('/byeducationid/:educationId', verifyObjectId, getEducationByEduId);
 
 /**
  * Update an education entry by its ID
@@ -64,6 +66,7 @@ router.put(
     verifyJWT,
     verifyAdminStatus,
     upload.fields([{ name: 'logo', maxCount: 1 }]),
+    verifyObjectId,
     updateEducation,
 );
 
@@ -74,7 +77,7 @@ router.put(
  * @middleware verifyJWT, verifyAdminStatus
  * @returns {Object} 200 - Deletion result
  */
-router.delete('/:educationId', verifyJWT, verifyAdminStatus, deleteEducation);
+router.delete('/:educationId', verifyJWT, verifyAdminStatus, verifyObjectId, deleteEducation);
 
 /**
  * Exports the education router

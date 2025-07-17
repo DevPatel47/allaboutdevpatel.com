@@ -13,10 +13,10 @@ import { ApiResponse } from '../../utils/ApiResponse.js';
 const createIntroduction = asyncHandler(async (req, res) => {
     const { userId } = req.params;
     // Use safe trimming to avoid errors if fields are missing
-    const greeting = req.body.greeting?.trim();
-    const name = req.body.name?.trim();
-    const tagline = req.body.tagline?.trim();
-    const description = req.body.description?.trim();
+    const greeting = req.body?.greeting?.trim();
+    const name = req.body?.name?.trim();
+    const tagline = req.body?.tagline?.trim();
+    const description = req.body?.description?.trim();
 
     // Validate required fields
     if (!userId || !greeting || !name || !tagline || !description) {
@@ -24,7 +24,7 @@ const createIntroduction = asyncHandler(async (req, res) => {
     }
 
     // Only allow the user themselves to create their introduction
-    if (userId !== req.user.id) {
+    if (userId.toString() !== req.user._id.toString()) {
         return res
             .status(403)
             .json(new ApiError(403, 'You are not authorized to create this introduction'));
@@ -110,17 +110,22 @@ const getIntroduction = asyncHandler(async (req, res) => {
 const updateIntroduction = asyncHandler(async (req, res) => {
     const { userId } = req.params;
     // Use safe trimming and allow partial updates
-    const greeting = req.body.greeting?.trim();
-    const name = req.body.name?.trim();
-    const tagline = req.body.tagline?.trim();
-    const description = req.body.description?.trim();
+    const greeting = req.body?.greeting?.trim();
+    const name = req.body?.name?.trim();
+    const tagline = req.body?.tagline?.trim();
+    const description = req.body?.description?.trim();
 
     if (!userId) {
         return res.status(400).json(new ApiError(400, 'User ID is required'));
     }
 
+    // Validate required fields
+    if (!greeting || !name || !tagline || !description) {
+        return res.status(400).json(new ApiError(400, 'All fields are required'));
+    }
+
     // Only allow the user themselves to update their introduction
-    if (userId !== req.user.id) {
+    if (userId.toString() !== req.user._id.toString()) {
         return res
             .status(403)
             .json(new ApiError(403, 'You are not authorized to update this introduction'));
@@ -197,7 +202,7 @@ const deleteIntroduction = asyncHandler(async (req, res) => {
     }
 
     // Only allow the user themselves to delete their introduction
-    if (userId !== req.user.id) {
+    if (userId.toString() !== req.user._id.toString()) {
         return res
             .status(403)
             .json(new ApiError(403, 'You are not authorized to delete this introduction'));
