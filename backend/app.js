@@ -13,7 +13,7 @@ const app = express();
 // Enable CORS with credentials and allowed origin from environment variable
 app.use(
     cors({
-        origin: process.env.CORS_ORIGIN || 'http://localhost:3000', // React dev server default port
+        origin: process.env.CORS_ORIGIN || 'http://localhost:5173/',
         credentials: true,
     }),
 );
@@ -49,18 +49,17 @@ app.use('/api/v1/portfolio/skills', skillRouter);
 // app.use('/api/v1/portfolio/social-links', socialLinkRouter);
 // app.use('/api/v1/site-settings', siteSettingRouter);
 
-// Serve React build folder for production
-const buildPath = path.join(__dirname, '../frontend/build');
-app.use(express.static(buildPath));
+// Serve React dist folder for production
+const distPath = path.join(__dirname, '../frontend/dist');
+app.use(express.static(distPath));
 
-// Catch-all handler for SPA: serve index.html for any unknown route (except API)
+// Serve index.html for all non-API routes
 app.get('*name', (req, res) => {
-    // If request starts with /api, pass to next middleware (or 404)
     if (req.path.startsWith('/api/')) {
         return res.status(404).json({ message: 'API route not found' });
     }
-    // Otherwise serve React's index.html
-    res.sendFile(path.join(buildPath, 'index.html'));
+    res.sendFile(path.join(distPath, 'index.html'));
 });
+
 
 export { app };
