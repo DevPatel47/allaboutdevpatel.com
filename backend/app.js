@@ -30,11 +30,9 @@ import educationRouter from './routes/portfolio/education.routes.js';
 import experienceRouter from './routes/portfolio/experience.routes.js';
 import skillRouter from './routes/portfolio/skill.routes.js';
 import projectRouter from './routes/portfolio/project.routes.js';
-// import contactRouter from './routes/portfolio/contact.routes.js';
-// import testimonialRouter from './routes/portfolio/testimonial.routes.js';
-// import certificationRouter from './routes/portfolio/certification.routes.js';
-// import socialLinkRouter from './routes/portfolio/sociallink.routes.js';
-// import siteSettingRouter from './routes/portfolio/sitesetting.routes.js';
+import certificationRouter from './routes/portfolio/certification.routes.js';
+import socialLinkRouter from './routes/portfolio/sociallink.routes.js';
+import testimonialRouter from './routes/portfolio/testimonial.routes.js';
 
 // Register API routes with versioned prefixes
 app.use('/api/v1/users', userRouter);
@@ -43,11 +41,9 @@ app.use('/api/v1/portfolio/educations', educationRouter);
 app.use('/api/v1/portfolio/experiences', experienceRouter);
 app.use('/api/v1/portfolio/skills', skillRouter);
 app.use('/api/v1/portfolio/projects', projectRouter);
-// app.use('/api/v1/portfolio/contacts', contactRouter);
-// app.use('/api/v1/portfolio/testimonials', testimonialRouter);
-// app.use('/api/v1/portfolio/certifications', certificationRouter);
-// app.use('/api/v1/portfolio/social-links', socialLinkRouter);
-// app.use('/api/v1/site-settings', siteSettingRouter);
+app.use('/api/v1/portfolio/certifications', certificationRouter);
+app.use('/api/v1/portfolio/social-links', socialLinkRouter);
+app.use('/api/v1/portfolio/testimonials', testimonialRouter);
 
 // Serve React dist folder for production
 const distPath = path.join(__dirname, '../frontend/dist');
