@@ -149,13 +149,13 @@ const getExperienceByExpId = asyncHandler(async (req, res) => {
  */
 const updateExperience = asyncHandler(async (req, res) => {
     const { experienceId } = req.params;
-    const title = req.body.title?.trim();
-    const company = req.body.company?.trim();
-    const location = req.body.location?.trim();
-    const startDate = req.body.startDate;
-    const endDate = req.body.endDate;
-    const commaSepratedResponsibilities = req.body.responsibilities?.trim();
-    const commaSepratedTechStack = req.body.techStack?.trim();
+    const title = req.body?.title?.trim();
+    const company = req.body?.company?.trim();
+    const location = req.body?.location?.trim();
+    const startDate = req.body?.startDate;
+    const endDate = req.body?.endDate;
+    const commaSepratedResponsibilities = req.body?.responsibilities?.trim();
+    const commaSepratedTechStack = req.body?.techStack?.trim();
 
     // Parse responsibilities and tech stack from comma-separated strings
     const responsibilities = commaSepratedResponsibilities
