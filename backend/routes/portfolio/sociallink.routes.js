@@ -22,11 +22,12 @@ import { verifyObjectId } from '../../middlewares/checkObjectId.middleware.js';
 const router = Router();
 
 /**
- * Create a new social link entry for a user
+ * Create one or more social link entries for a user
  * @route POST /:userId
  * @param {string} userId - User ID (in URL path)
+ * @body {Array} links - Array of link objects (platform, url, icon)
  * @middleware verifyJWT, verifyAdminStatus, verifyObjectId
- * @returns {Object} 201 - Created social link entry
+ * @returns {Object} 201 - Created social link entries
  */
 router.post('/:userId', verifyJWT, verifyAdminStatus, verifyObjectId, createSocialLink);
 
@@ -52,6 +53,9 @@ router.get('/bysociallinkid/:socialLinkId', verifyObjectId, getSocialLinkById);
  * Update a social link entry by its ID
  * @route PUT /:socialLinkId
  * @param {string} socialLinkId - Social link entry ID (in URL path)
+ * @body {string} platform - Platform name
+ * @body {string} url - Profile URL
+ * @body {string} icon - Icon URL (optional)
  * @middleware verifyJWT, verifyAdminStatus, verifyObjectId
  * @returns {Object} 200 - Updated social link entry
  */
