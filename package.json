@@ -8,7 +8,7 @@
     "install-all": "npm install --prefix backend && npm install --prefix frontend",
     "start": "concurrently \"npm run server\" \"npm run client\"",
     "server": "npm start --prefix backend",
-    "client": "npm start --prefix frontend",
+    "client": "npm run build --prefix frontend && npm start --prefix frontend",
     "build": "npm run build --prefix frontend"
   },
   "repository": {
