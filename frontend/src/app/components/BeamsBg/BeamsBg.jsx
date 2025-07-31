@@ -7,7 +7,10 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { PerspectiveCamera } from '@react-three/drei';
 import { degToRad } from 'three/src/math/MathUtils.js';
 
+import useTheme from '../../contexts/theme.js';
+
 function extendMaterial(BaseMaterial, cfg) {
+
     const physical = THREE.ShaderLib.physical;
     const { vertexShader: baseVert, fragmentShader: baseFrag, uniforms: baseUniforms } = physical;
     const baseDefines = physical.defines ?? {};
@@ -149,6 +152,8 @@ const Beams = ({
     scale = 0.2,
     rotation = 0,
 }) => {
+
+    const { themeMode } = useTheme();
     const meshRef = useRef(null);
     const beamMaterial = useMemo(
         () =>
@@ -194,17 +199,17 @@ const Beams = ({
                 },
                 material: { fog: true },
                 uniforms: {
-                    diffuse: new THREE.Color(...hexToNormalizedRGB('#000000')),
+                    diffuse: new THREE.Color(...hexToNormalizedRGB(`${themeMode === 'dark' ? '#000000' : '#ffffffff'}`)),
                     time: { shared: true, mixed: true, linked: true, value: 0 },
                     roughness: 0.3,
-                    metalness: 0.3,
+                    metalness: 0.5,
                     uSpeed: { shared: true, mixed: true, linked: true, value: speed },
                     envMapIntensity: 10,
                     uNoiseIntensity: noiseIntensity,
                     uScale: scale,
                 },
             }),
-        [speed, noiseIntensity, scale],
+        [speed, noiseIntensity, scale, themeMode],
     );
 
     return (
@@ -219,8 +224,8 @@ const Beams = ({
                 />
                 <DirLight color={lightColor} position={[0, 3, 10]} />
             </group>
-            <ambientLight intensity={1} />
-            <color attach="background" args={['#000000']} />
+            <ambientLight intensity={themeMode === 'dark' ? 1 : 0.3} />
+            <color attach="background" args={[`${themeMode === 'dark' ? '#000000' : '#ffffffff'}`]} />
             <PerspectiveCamera makeDefault position={[0, 0, 20]} fov={30} />
         </CanvasWrapper>
     );
@@ -313,7 +318,7 @@ const DirLight = ({ position, color }) => {
         dir.current.shadow.bias = -0.004;
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-    return <directionalLight ref={dir} color={color} intensity={1} position={position} />;
+    return <directionalLight ref={dir} color={color} intensity={2} position={position} />;
 };
 
 export default Beams;

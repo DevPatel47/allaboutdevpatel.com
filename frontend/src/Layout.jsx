@@ -17,24 +17,24 @@ function Layout() {
 
     return (
         <ThemeProvider value={{ themeMode, darkTheme, lightTheme }}>
-            <div className="relative w-full h-screen overflow-hidden">
+            <div className="relative min-h-screen w-full overflow-x-hidden">
                 {/* Beams background */}
                 <div className="absolute inset-0 z-0">
                     <Beams
-                        beamWidth={2}
+                        beamWidth={1}
                         beamHeight={30}
-                        beamNumber={12}
+                        beamNumber={30}
                         lightColor="#208afa"
-                        speed={1.5}
-                        noiseIntensity={1.75}
+                        speed={3}
+                        noiseIntensity={0.3}
                         scale={0.2}
                         rotation={135}
                     />
                 </div>
 
-                <div className="relative z-10 flex flex-col justify-between items-center h-full text-center">
+                <div className="relative z-10 flex flex-col min-h-screen items-center justify-between">
                     <Header />
-                    <main className="my-8 w-full max-w-3xl">
+                    <main className="flex-1 my-8 w-full max-w-3xl mx-auto">
                         <Outlet />
                     </main>
                     <Footer />

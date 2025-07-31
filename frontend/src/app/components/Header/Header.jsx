@@ -1,16 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, NavLink, useParams } from 'react-router-dom';
 import useTheme from '../../contexts/theme.js';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { faSun, faMoon } from '@fortawesome/free-solid-svg-icons';
 
 function Header() {
     const { themeMode, lightTheme, darkTheme } = useTheme();
+    const [menuOpen, setMenuOpen] = useState(false);
 
-    const onChangeThemeBtn = (e) => {
-        const darkModeStatus = e.currentTarget.textContent === '🌙';
-        if (darkModeStatus) {
-            darkTheme();
-        } else {
+    const onChangeThemeBtn = () => {
+        if (themeMode === 'dark') {
             lightTheme();
+        } else {
+            darkTheme();
         }
     };
 
@@ -18,60 +21,154 @@ function Header() {
     const basePath = username ? `/${username}` : '';
 
     return (
-        <header
-            className="w-300 h-22 p-10 m-6
-            flex items-center justify-between rounded-full border-2
-            text-xl
-            backdrop-blur-md
-            text-gray-300
-            dark:border-zinc-950 dark:text-gray-300"
-        >
-            {/* Logo */}
-            <div>
-                <Link to={`${basePath}/`}>
-                    Dev's <span className="text-blue-600">Portfolio.</span>
-                </Link>
-            </div>
+        <>
+            <header
+                className="container w-full md:w-300 h-auto p-6 md:p-6 m-2 md:m-6
+                flex flex-row items-center justify-between rounded-full backdrop-blur-md
+                border-2 border-zinc-50 dark:border-zinc-950
+                text-xl text-white dark:text-gray-300 transition-all duration-200 relative z-50"
+            >
+                {/* Logo */}
+                <div className="mb-0">
+                    <Link to={`${basePath}/`} className="font-bold dark:text-gray-300">
+                        Dev's <span className="text-blue-600">Portfolio.</span>
+                    </Link>
+                </div>
 
-            {/* Navigation */}
-            <div>
-                <nav className="flex items-center gap-8">
+                {/* Hamburger Button for Mobile */}
+                <div className="md:hidden flex items-center">
+                    <button
+                        className="flex items-center px-3 py-2 border rounded dark:text-gray-500 dark:border-gray-500"
+                        onClick={() => setMenuOpen(!menuOpen)}
+                        aria-label="Toggle navigation"
+                    >
+                        <FontAwesomeIcon icon={faBars} className="h-6 w-6" />
+                    </button>
+                </div>
+
+                {/* Desktop Navigation */}
+                <nav className="hidden md:flex flex-row items-center gap-8">
                     <NavLink
                         to={`${basePath}/`}
                         end
-                        className={({ isActive }) => (isActive ? 'text-blue-600' : 'text-gray-500')}
+                        className={({ isActive }) =>
+                            (isActive ? 'text-blue-600' : 'dark:text-gray-500') +
+                            ' hover:text-blue-500 transition-colors'
+                        }
                     >
                         Home
                     </NavLink>
-
                     <NavLink
                         to={`${basePath}/projects`}
-                        className={({ isActive }) => (isActive ? 'text-blue-600' : 'text-gray-500')}
+                        className={({ isActive }) =>
+                            (isActive ? 'text-blue-600' : 'dark:text-gray-500') +
+                            ' hover:text-blue-500 transition-colors'
+                        }
                     >
                         Projects
                     </NavLink>
                     <NavLink
                         to={`${basePath}/github`}
-                        className={({ isActive }) => (isActive ? 'text-blue-600' : 'text-gray-500')}
+                        className={({ isActive }) =>
+                            (isActive ? 'text-blue-600' : 'dark:text-gray-500') +
+                            ' hover:text-blue-500 transition-colors'
+                        }
                     >
                         GitHub
                     </NavLink>
                     <NavLink
                         to={`${basePath}/login`}
-                        className={({ isActive }) => (isActive ? 'text-blue-600' : 'text-gray-500')}
+                        className={({ isActive }) =>
+                            (isActive ? 'text-blue-600' : 'dark:text-gray-500') +
+                            ' hover:text-blue-500 transition-colors'
+                        }
                     >
                         Login
                     </NavLink>
+                    {/* Theme Toggle Button */}
+                    <button
+                        onClick={onChangeThemeBtn}
+                        className="text-xl ml-2 dark:text-gray-500"
+                        aria-label="Toggle theme"
+                    >
+                        {themeMode === 'dark' ? (
+                            <FontAwesomeIcon icon={faSun} className="h-5 w-5" />
+                        ) : (
+                            <FontAwesomeIcon icon={faMoon} className="h-5 w-5" />
+                        )}
+                    </button>
                 </nav>
-            </div>
+            </header>
 
-            {/* Theme Toggle Button */}
-            <div>
-                <button onClick={onChangeThemeBtn} className="text-xl">
-                    {themeMode === 'dark' ? '☀️' : '🌙'}
-                </button>
-            </div>
-        </header>
+            {/* Mobile Navigation - OUTSIDE header */}
+            {menuOpen && (
+                <div
+                    className="
+                        fixed top-[90px] left-0 w-full
+                        flex flex-col items-center gap-4
+                        backdrop-blur-md
+                        rounded-b-3xl
+                        p-6 shadow-lg z-40
+                        md:hidden
+                        animate-fade-in
+                    "
+                >
+                    <NavLink
+                        to={`${basePath}/`}
+                        end
+                        className={({ isActive }) =>
+                            (isActive ? 'text-blue-600' : 'dark:text-gray-500') +
+                            ' hover:text-blue-500 transition-colors'
+                        }
+                        onClick={() => setMenuOpen(false)}
+                    >
+                        Home
+                    </NavLink>
+                    <NavLink
+                        to={`${basePath}/projects`}
+                        className={({ isActive }) =>
+                            (isActive ? 'text-blue-600' : 'dark:text-gray-500') +
+                            ' hover:text-blue-500 transition-colors'
+                        }
+                        onClick={() => setMenuOpen(false)}
+                    >
+                        Projects
+                    </NavLink>
+                    <NavLink
+                        to={`${basePath}/github`}
+                        className={({ isActive }) =>
+                            (isActive ? 'text-blue-600' : 'dark:text-gray-500') +
+                            ' hover:text-blue-500 transition-colors'
+                        }
+                        onClick={() => setMenuOpen(false)}
+                    >
+                        GitHub
+                    </NavLink>
+                    <NavLink
+                        to={`${basePath}/login`}
+                        className={({ isActive }) =>
+                            (isActive ? 'text-blue-600' : 'dark:text-gray-500') +
+                            ' hover:text-blue-500 transition-colors'
+                        }
+                        onClick={() => setMenuOpen(false)}
+                    >
+                        Login
+                    </NavLink>
+                    {/* Theme Toggle Button */}
+                    <button
+                        onClick={onChangeThemeBtn}
+                        className="text-xl mt-2 dark:text-gray-500"
+                        aria-label="Toggle theme"
+                    >
+                        {themeMode === 'dark' ? (
+                            <FontAwesomeIcon icon={faSun} className="h-5 w-5" />
+                        ) : (
+                            <FontAwesomeIcon icon={faMoon} className="h-5 w-5" />
+                        )}
+                    </button>
+                </div>
+            )}
+        </>
     );
 }
 
