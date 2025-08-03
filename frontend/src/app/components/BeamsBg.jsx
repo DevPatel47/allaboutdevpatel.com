@@ -7,7 +7,7 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { PerspectiveCamera } from '@react-three/drei';
 import { degToRad } from 'three/src/math/MathUtils.js';
 
-import useTheme from '../../contexts/theme.js';
+import useTheme from '../contexts/theme.js';
 
 function extendMaterial(BaseMaterial, cfg) {
 

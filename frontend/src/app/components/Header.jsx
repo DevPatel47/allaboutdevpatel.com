@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, NavLink, useParams } from 'react-router-dom';
-import useTheme from '../../contexts/theme.js';
+import useTheme from '../contexts/theme.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { faSun, faMoon } from '@fortawesome/free-solid-svg-icons';
@@ -24,13 +24,14 @@ function Header() {
         <>
             <header
                 className="container w-full md:w-300 h-auto p-6 md:p-6 m-2 md:m-6
-                flex flex-row items-center justify-between rounded-full backdrop-blur-md
+                flex flex-row items-center justify-between rounded-full 
+                bg-white/30 dark:bg-zinc-950/30 backdrop-blur-md
                 border-2 border-zinc-50 dark:border-zinc-950
-                text-xl text-white dark:text-gray-300 transition-all duration-200 relative z-50"
+                text-xl text-white dark:text-gray-300 relative z-50"
             >
                 {/* Logo */}
-                <div className="mb-0">
-                    <Link to={`${basePath}/`} className="font-bold dark:text-gray-300">
+                <div className="mb-0 mx-6">
+                    <Link to={`${basePath}/`} className="font-bold dark:text-gray-300 text-2xl">
                         Dev's <span className="text-blue-600">Portfolio.</span>
                     </Link>
                 </div>

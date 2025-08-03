@@ -59,7 +59,7 @@ const getPortfolioByUsername = asyncHandler(async (req, res) => {
         Education.find({ userId }).lean(),
         Experience.find({ userId }).lean(),
         Certification.find({ userId }).lean(),
-        SocialLink.findOne({ userId }).lean(),
+        SocialLink.find({ userId }).lean(),
         Testimonial.find({}).lean(),
     ]);
 

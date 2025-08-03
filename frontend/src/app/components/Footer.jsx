@@ -6,7 +6,7 @@ function Footer() {
     return (
         <div
             className="w-full h-40 
-        flex flex-col items-center justify-around backdrop-blur-md
+        flex flex-col items-center justify-around backdrop-blur-md 
         text-xl text-white dark:text-gray-500 text-center
         border-t-2 border-zinc-50 dark:border-zinc-950
         "

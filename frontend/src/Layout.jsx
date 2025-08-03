@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
-import { Header, Footer } from './components.js';
 import { ThemeProvider } from './app/contexts/theme.js';
-import Beams from './app/components/BeamsBg/BeamsBg.jsx';
+import { Header, Footer, BeamsBg } from './app/components/index.js';
 
 function Layout() {
     const [themeMode, setThemeMode] = useState('dark');
@@ -18,9 +17,9 @@ function Layout() {
     return (
         <ThemeProvider value={{ themeMode, darkTheme, lightTheme }}>
             <div className="relative min-h-screen w-full overflow-x-hidden">
-                {/* Beams background */}
+                {/* BeamsBg background */}
                 <div className="absolute inset-0 z-0">
-                    <Beams
+                    <BeamsBg
                         beamWidth={1}
                         beamHeight={30}
                         beamNumber={30}
@@ -34,7 +33,11 @@ function Layout() {
 
                 <div className="relative z-10 flex flex-col min-h-screen items-center justify-between">
                     <Header />
-                    <main className="flex-1 my-8 w-full max-w-3xl mx-auto">
+                    <main
+                        className="flex flex-col items-center justify-start
+                    my-8 px-4 
+                    w-full max-w-6xl mx-auto min-h-[calc(100vh-400px)]"
+                    >
                         <Outlet />
                     </main>
                     <Footer />

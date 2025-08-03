@@ -19,7 +19,7 @@ import {
     Login,
     Register,
     ProjectDetails,
-} from './components.js';
+} from './app/components/index.js';
 
 const router = createBrowserRouter(
     createRoutesFromElements(
