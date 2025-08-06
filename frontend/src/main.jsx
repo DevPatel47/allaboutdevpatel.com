@@ -1,3 +1,9 @@
+/**
+ * Main entry point for the React application.
+ * Sets up routing and renders the root component.
+ * @module main
+ */
+
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
@@ -48,7 +54,12 @@ const router = createBrowserRouter(
     ),
 );
 
-createRoot(document.getElementById('root')).render(
+const rootElement = document.getElementById('root');
+if (!rootElement) {
+    throw new Error('Root element with id "root" not found.');
+}
+
+createRoot(rootElement).render(
     <StrictMode>
         <RouterProvider router={router} />
     </StrictMode>,

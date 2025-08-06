@@ -1,14 +1,31 @@
+/**
+ * Header Component
+ *
+ * Provides the main navigation bar, logo, theme switcher, and responsive menu.
+ * Supports both light and dark themes and adapts to user profile routes.
+ *
+ * @module Header
+ */
+
 import React, { useState } from 'react';
 import { Link, NavLink, useParams } from 'react-router-dom';
 import useTheme from '../contexts/theme.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
-import { faSun, faMoon } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faSun, faMoon } from '@fortawesome/free-solid-svg-icons';
+import { Logo } from './index.js';
 
+/**
+ * Header component for the application.
+ * Renders navigation, logo, and theme switcher.
+ * @returns {JSX.Element}
+ */
 function Header() {
     const { themeMode, lightTheme, darkTheme } = useTheme();
     const [menuOpen, setMenuOpen] = useState(false);
 
+    /**
+     * Handles theme toggle button click.
+     */
     const onChangeThemeBtn = () => {
         if (themeMode === 'dark') {
             lightTheme();
@@ -21,155 +38,189 @@ function Header() {
     const basePath = username ? `/${username}` : '';
 
     return (
-        <>
-            <header
-                className="container w-full md:w-300 h-auto p-6 md:p-6 m-2 md:m-6
-                flex flex-row items-center justify-between rounded-full 
-                bg-white/30 dark:bg-zinc-950/30 backdrop-blur-md
-                border-2 border-zinc-50 dark:border-zinc-950
-                text-xl text-white dark:text-gray-300 relative z-50"
-            >
-                {/* Logo */}
-                <div className="mb-0 mx-6">
-                    <Link to={`${basePath}/`} className="font-bold dark:text-gray-300 text-2xl">
-                        Dev's <span className="text-blue-600">Portfolio.</span>
-                    </Link>
-                </div>
+        <header
+            className="
+                container mx-auto h-20 pr-8 mt-4 z-50
+                fixed inset-x-0 top-0 
+                bg-zinc-50/20 dark:bg-zinc-900/20 backdrop-blur-lg
+                flex items-center justify-between
+                text-zinc-900 dark:text-zinc-50
+                border-2 border-zinc-200 dark:border-zinc-900 rounded-full
+                transition-all duration-300
+            "
+            role="banner"
+        >
+            <Logo className="transition-all duration-300" />
 
-                {/* Hamburger Button for Mobile */}
-                <div className="md:hidden flex items-center">
-                    <button
-                        className="flex items-center px-3 py-2 border rounded dark:text-gray-500 dark:border-gray-500"
-                        onClick={() => setMenuOpen(!menuOpen)}
-                        aria-label="Toggle navigation"
-                    >
-                        <FontAwesomeIcon icon={faBars} className="h-6 w-6" />
-                    </button>
-                </div>
+            {/* Mobile menu button */}
+            <div className="w-full flex justify-end transition-all duration-300">
+                <button
+                    className="md:hidden p-2 rounded-md hover:bg-zinc-200/50 dark:hover:bg-zinc-800/50 transition-all duration-300"
+                    onClick={() => setMenuOpen(!menuOpen)}
+                    aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+                    aria-expanded={menuOpen}
+                    aria-controls="mobile-menu"
+                    type="button"
+                >
+                    <FontAwesomeIcon
+                        icon={faBars}
+                        className="h-5 w-5 transition-all duration-300"
+                    />
+                </button>
+            </div>
 
-                {/* Desktop Navigation */}
-                <nav className="hidden md:flex flex-row items-center gap-8">
-                    <NavLink
-                        to={`${basePath}/`}
-                        end
-                        className={({ isActive }) =>
-                            (isActive ? 'text-blue-600' : 'dark:text-gray-500') +
-                            ' hover:text-blue-500 transition-colors'
-                        }
-                    >
-                        Home
-                    </NavLink>
-                    <NavLink
-                        to={`${basePath}/projects`}
-                        className={({ isActive }) =>
-                            (isActive ? 'text-blue-600' : 'dark:text-gray-500') +
-                            ' hover:text-blue-500 transition-colors'
-                        }
-                    >
-                        Projects
-                    </NavLink>
-                    <NavLink
-                        to={`${basePath}/github`}
-                        className={({ isActive }) =>
-                            (isActive ? 'text-blue-600' : 'dark:text-gray-500') +
-                            ' hover:text-blue-500 transition-colors'
-                        }
-                    >
-                        GitHub
-                    </NavLink>
-                    <NavLink
-                        to={`${basePath}/login`}
-                        className={({ isActive }) =>
-                            (isActive ? 'text-blue-600' : 'dark:text-gray-500') +
-                            ' hover:text-blue-500 transition-colors'
-                        }
-                    >
-                        Login
-                    </NavLink>
-                    {/* Theme Toggle Button */}
-                    <button
-                        onClick={onChangeThemeBtn}
-                        className="text-xl ml-2 dark:text-gray-500"
-                        aria-label="Toggle theme"
-                    >
-                        {themeMode === 'dark' ? (
-                            <FontAwesomeIcon icon={faSun} className="h-5 w-5" />
-                        ) : (
-                            <FontAwesomeIcon icon={faMoon} className="h-5 w-5" />
-                        )}
-                    </button>
-                </nav>
-            </header>
-
-            {/* Mobile Navigation - OUTSIDE header */}
-            {menuOpen && (
-                <div
-                    className="
-                        fixed top-[90px] left-0 w-full
-                        flex flex-col items-center gap-4
-                        backdrop-blur-md
-                        rounded-b-3xl
-                        p-6 shadow-lg z-40
-                        md:hidden
-                        animate-fade-in
-                    "
+            {/* Desktop navigation */}
+            <div className="flex items-center transition-all duration-300">
+                <nav
+                    className="hidden md:flex flex-row items-center gap-8 transition-all duration-300"
+                    aria-label="Main navigation"
                 >
                     <NavLink
                         to={`${basePath}/`}
                         end
                         className={({ isActive }) =>
-                            (isActive ? 'text-blue-600' : 'dark:text-gray-500') +
-                            ' hover:text-blue-500 transition-colors'
+                            (isActive ? '' : 'text-zinc-500 dark:text-zinc-400') +
+                            ' text-lg font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300'
                         }
-                        onClick={() => setMenuOpen(false)}
                     >
                         Home
                     </NavLink>
                     <NavLink
                         to={`${basePath}/projects`}
+                        end
                         className={({ isActive }) =>
-                            (isActive ? 'text-blue-600' : 'dark:text-gray-500') +
-                            ' hover:text-blue-500 transition-colors'
+                            (isActive ? '' : 'text-zinc-500 dark:text-zinc-400') +
+                            ' text-lg font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300'
                         }
-                        onClick={() => setMenuOpen(false)}
                     >
                         Projects
                     </NavLink>
                     <NavLink
                         to={`${basePath}/github`}
+                        end
                         className={({ isActive }) =>
-                            (isActive ? 'text-blue-600' : 'dark:text-gray-500') +
-                            ' hover:text-blue-500 transition-colors'
+                            (isActive ? '' : 'text-zinc-500 dark:text-zinc-400') +
+                            ' text-lg font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300'
                         }
-                        onClick={() => setMenuOpen(false)}
                     >
-                        GitHub
+                        Github
                     </NavLink>
                     <NavLink
-                        to={`${basePath}/login`}
+                        to={`${basePath}/admin`}
+                        end
                         className={({ isActive }) =>
-                            (isActive ? 'text-blue-600' : 'dark:text-gray-500') +
-                            ' hover:text-blue-500 transition-colors'
+                            (isActive ? '' : 'text-zinc-500 dark:text-zinc-400') +
+                            ' text-lg font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300'
                         }
-                        onClick={() => setMenuOpen(false)}
                     >
-                        Login
+                        Admin
                     </NavLink>
-                    {/* Theme Toggle Button */}
                     <button
                         onClick={onChangeThemeBtn}
-                        className="text-xl mt-2 dark:text-gray-500"
+                        className="w-24 flex flex-row justify-around items-center text-lg font-semibold text-zinc-500 dark:text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300"
                         aria-label="Toggle theme"
+                        type="button"
                     >
+                        Theme
                         {themeMode === 'dark' ? (
-                            <FontAwesomeIcon icon={faSun} className="h-5 w-5" />
+                            <FontAwesomeIcon
+                                icon={faSun}
+                                className="h-5 w-5 transition-all duration-300"
+                            />
                         ) : (
-                            <FontAwesomeIcon icon={faMoon} className="h-5 w-5" />
+                            <FontAwesomeIcon
+                                icon={faMoon}
+                                className="h-5 w-5 transition-all duration-300"
+                            />
                         )}
                     </button>
-                </div>
-            )}
-        </>
+                </nav>
+
+                {/* Mobile navigation menu */}
+                {menuOpen && (
+                    <div
+                        id="mobile-menu"
+                        className="absolute top-20 right-4 bg-white dark:bg-zinc-800 rounded-lg shadow-lg p-4
+                        flex flex-col space-y-2 md:hidden
+                        animate-fade-in
+                        transition-all duration-300"
+                        role="menu"
+                        aria-label="Mobile navigation"
+                    >
+                        <NavLink
+                            to={`${basePath}/`}
+                            end
+                            className={({ isActive }) =>
+                                (isActive ? '' : 'text-zinc-500 dark:text-zinc-400') +
+                                ' text-lg font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300'
+                            }
+                            role="menuitem"
+                            onClick={() => setMenuOpen(false)}
+                        >
+                            Home
+                        </NavLink>
+                        <NavLink
+                            to={`${basePath}/projects`}
+                            end
+                            className={({ isActive }) =>
+                                (isActive ? '' : 'text-zinc-500 dark:text-zinc-400') +
+                                ' text-lg font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300'
+                            }
+                            role="menuitem"
+                            onClick={() => setMenuOpen(false)}
+                        >
+                            Projects
+                        </NavLink>
+                        <NavLink
+                            to={`${basePath}/github`}
+                            end
+                            className={({ isActive }) =>
+                                (isActive ? '' : 'text-zinc-500 dark:text-zinc-400') +
+                                ' text-lg font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300'
+                            }
+                            role="menuitem"
+                            onClick={() => setMenuOpen(false)}
+                        >
+                            Github
+                        </NavLink>
+                        <NavLink
+                            to={`${basePath}/admin`}
+                            end
+                            className={({ isActive }) =>
+                                (isActive ? '' : 'text-zinc-500 dark:text-zinc-400') +
+                                ' text-lg font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300'
+                            }
+                            role="menuitem"
+                            onClick={() => setMenuOpen(false)}
+                        >
+                            Admin
+                        </NavLink>
+                        <button
+                            onClick={() => {
+                                onChangeThemeBtn();
+                                setMenuOpen(false);
+                            }}
+                            className="text-lg font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300"
+                            aria-label="Toggle theme"
+                            type="button"
+                        >
+                            Theme{' '}
+                            {themeMode === 'dark' ? (
+                                <FontAwesomeIcon
+                                    icon={faSun}
+                                    className="h-5 w-5 transition-all duration-300"
+                                />
+                            ) : (
+                                <FontAwesomeIcon
+                                    icon={faMoon}
+                                    className="h-5 w-5 transition-all duration-300"
+                                />
+                            )}
+                        </button>
+                    </div>
+                )}
+            </div>
+        </header>
     );
 }
 

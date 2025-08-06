@@ -1,7 +1,68 @@
-@import url('https://fonts.googleapis.com/css2?family=Poiret+One&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+/**
+ * Index.css
+ * Main stylesheet for global styles and custom utilities.
+ * Includes Tailwind base, components, and utilities, as well as custom shine text effects.
+ * @see https://tailwindcss.com/docs/installation
+ */
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Custom dark variant for Tailwind (if needed by your setup) */
 @custom-variant dark (&:where(.dark, .dark *));
+
+/* 
+ * Shine text effect for dark theme.
+ * Usage: <span class="shine-text-dark">Text</span>
+ */
+.shine-text-dark {
+    position: relative;
+    display: inline-block;
+    background: linear-gradient(
+        90deg,
+        rgba(180,180,180,0.2) 0%,
+        rgba(255,255,255,0.7) 40%,
+        rgba(180,180,180,0.2) 60%,
+        rgba(180,180,180,0.2) 100%
+    );
+    background-size: 200% auto;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    animation: shine-move 20s linear infinite;
+}
+
+/* 
+ * Shine text effect for light theme.
+ * Usage: <span class="shine-text-light">Text</span>
+ */
+.shine-text-light {
+    position: relative;
+    display: inline-block;
+    background: linear-gradient(
+        90deg,
+        rgba(220,220,220,0.2) 0%,
+        rgba(180,180,180,0.4) 30%,
+        rgba(120,120,120,0.7) 50%,
+        rgba(180,180,180,0.4) 70%,
+        rgba(220,220,220,0.2) 100%
+    );
+    background-size: 200% auto;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    animation: shine-move 20s linear infinite;
+}
+
+/* Shine animation for text gradients */
+@keyframes shine-move {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
