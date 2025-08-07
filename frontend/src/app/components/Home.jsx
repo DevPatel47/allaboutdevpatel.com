@@ -10,7 +10,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import PortfolioService from '../services/portfolio/portfolio.service.js';
-import { Introduction, Error, Loading, AboutMe, Education, AnimatedBlurDots } from './index.js';
+import { Introduction, Error, Loading, AboutMe, Education, Certifications } from './index.js';
 
 /**
  * Home component for the main landing page.
@@ -67,6 +67,7 @@ function Home() {
             />
             <AboutMe description={portfolio?.introduction?.description} />
             <Education education={portfolio?.education} />
+            <Certifications certifications={portfolio?.certifications} />
         </>
     );
 }

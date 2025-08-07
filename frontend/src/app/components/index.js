@@ -25,6 +25,7 @@ import Loading from './Loading.jsx';
 import Education from './Education.jsx';
 import AboutMe from './AboutMe.jsx';
 import AnimatedBlurDots from './AnimatedBlurDots.jsx';
+import Certifications from './Certifications.jsx';
 
 export {
     Layout,
@@ -48,4 +49,5 @@ export {
     Education,
     AboutMe,
     AnimatedBlurDots,
+    Certifications,
 };

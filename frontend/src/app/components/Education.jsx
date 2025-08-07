@@ -32,7 +32,7 @@ function Education({ education = [] }) {
                     items-center md:items-center
                     justify-between
                     w-full max-w-5xl
-                    md:gap-20
+                    lg:gap-20
                     transition-all duration-300
                 "
             >
@@ -44,7 +44,7 @@ function Education({ education = [] }) {
                         transition-all duration-300
                         relative z-0
                     "
-                >
+                >   
                     <h3
                         className="
                             lg:hidden
@@ -56,7 +56,7 @@ function Education({ education = [] }) {
                     >
                         Education
                     </h3>
-                    <div className="relative group transition-all duration-300">
+                    <div className="relative group transition-all duration-300 ">
                         <img
                             src={doodleImg}
                             alt="Education Doodle"

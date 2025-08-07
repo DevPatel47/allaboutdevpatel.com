@@ -22,7 +22,7 @@ function ShineTextBg({ text }) {
 
     return (
         <div className="absolute flex justify-center items-center w-full h-screen z-15 pointer-events-none select-none">
-            <h1 className="text-7xl sm:text-[130px] lg:text-[200px] xl:text-[300px] font-extrabold font-poiret text-zinc-950/75 dark:text-zinc-200/20 text-center relative overflow-hidden select-none">
+            <h1 className="text-7xl sm:text-[130px] lg:text-[200px] xl:text-[260px] 2xl:text-[300px] font-extrabold font-poiret text-zinc-950/75 dark:text-zinc-200/20 text-center relative overflow-hidden select-none">
                 <span
                     className={themeMode === 'dark' ? 'shine-text-dark' : 'shine-text-light'}
                     aria-hidden="true"
