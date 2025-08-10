@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { AnimatedBlurDots } from './index.js';
+import { AnimatedBlurDots } from './components.js';
 
 /**
  * Certifications Component
@@ -30,7 +30,6 @@ function Certifications({ certifications = [] }) {
                     items-center md:items-center
                     justify-between
                     w-full max-w-5xl
-                    gap-6
                     transition-all duration-300
                 "
             >
@@ -45,16 +44,16 @@ function Certifications({ certifications = [] }) {
                 >
                     🏅 My Certifications
                 </h3>
-                <div className="w-full max-w-2xl lg:max-w-5xl flex flex-col items-center gap-6 ">
+                <div className="w-full max-w-2xl lg:max-w-5xl flex flex-col items-center gap-6">
                     {certifications.map((cert, index) => (
                         <div
                             key={cert._id || index}
                             className="
-                                    flex flex-col md:flex-row items-center gap-4 w-full
-                                    p-6 bg-zinc-50/95 dark:bg-zinc-900/90 rounded-3xl
-                                    shadow-md hover:shadow-lg transition-shadow duration-300
-                                    border border-zinc-200 dark:border-zinc-800
-                                    relative z-10
+                                flex flex-col md:flex-row items-center gap-4 w-full
+                                p-6 bg-zinc-50/95 dark:bg-zinc-900/90 rounded-3xl
+                                shadow-md hover:shadow-lg transition-shadow duration-300
+                                border border-zinc-200 dark:border-zinc-800
+                                relative z-10
                             "
                         >
                             {cert.badgeImage && (
@@ -73,7 +72,7 @@ function Certifications({ certifications = [] }) {
                                 />
                             )}
                             <div className="flex-1 flex flex-col items-center md:items-start">
-                                <h4 className="font-bold text-lg md:text-2xl text-zinc-900 dark:text-zinc-50 mb-1 text-center md:text-left">
+                                <h4 className="font-bold text-lg md:text-2xl text-blue-900 dark:text-blue-200 mb-1 text-center md:text-left transition-all duration-300">
                                     {cert.title}
                                 </h4>
                                 <p className="text-sm md:text-base text-zinc-700 dark:text-zinc-300 mb-1 text-center md:text-left">

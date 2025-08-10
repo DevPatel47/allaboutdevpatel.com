@@ -11,7 +11,7 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { ThemeProvider } from './app/contexts/theme.js';
-import { Header, Footer, AnimatedBlurDots } from './app/components/index.js';
+import { Header, Footer } from './app/components/components.js';
 
 /**
  * Layout component for the app.

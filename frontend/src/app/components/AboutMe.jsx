@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import boyWithLaptop from '../../assets/boy-with-laptop.png';
-import { AnimatedBlurDots } from './index.js';
+import { AnimatedBlurDots } from './components.js';
 
 /**
  * AboutMe Component
@@ -58,7 +58,7 @@ function AboutMe({ description }) {
                             transition-all duration-300
                         "
                     >
-                        About Me
+                        👨‍💻 About Me
                     </h3>
                     <p
                         className="
@@ -99,7 +99,7 @@ function AboutMe({ description }) {
                             <span className="animate-pulse">npm run build-my-dreams</span>
                             <span className="text-zinc-400 dark:text-zinc-500">...</span>
                         </span>
-                        <span   
+                        <span
                             className="
                                 text-xs font-mono text-green-800 dark:text-green-200
                                 bg-zinc-200/80 dark:bg-zinc-800 px-2 py-1 rounded
@@ -149,7 +149,7 @@ function AboutMe({ description }) {
                             transition-all duration-300
                         "
                     >
-                        About Me
+                        👨‍💻 About Me
                     </h3>
                     <div className="relative group transition-all duration-300">
                         <img

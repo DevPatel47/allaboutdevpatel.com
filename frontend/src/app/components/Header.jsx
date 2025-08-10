@@ -8,11 +8,11 @@
  */
 
 import React, { useState } from 'react';
-import { Link, NavLink, useParams } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import useTheme from '../contexts/theme.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faSun, faMoon } from '@fortawesome/free-solid-svg-icons';
-import { Logo } from './index.js';
+import { Logo } from './components.js';
 
 /**
  * Header component for the application.

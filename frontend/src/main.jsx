@@ -25,7 +25,7 @@ import {
     Login,
     Register,
     ProjectDetails,
-} from './app/components/index.js';
+} from './app/pages/pages.js';
 
 const router = createBrowserRouter(
     createRoutesFromElements(

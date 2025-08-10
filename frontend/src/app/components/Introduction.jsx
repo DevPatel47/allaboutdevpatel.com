@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { TypewriterArray, ShineTextBg, SocialLinks, BgImage } from './index.js';
+import { TypewriterArray, ShineTextBg, SocialLinks, BgImage } from './components.js';
 
 /**
  * Introduction Component

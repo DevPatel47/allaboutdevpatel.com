@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import doodleImg from '../../assets/education-doodle.png';
-import { AnimatedBlurDots } from './index.js';
+import { AnimatedBlurDots } from './components.js';
 
 /**
  * Education Component
@@ -23,16 +23,15 @@ function Education({ education = [] }) {
             "
             aria-label="Education Section"
         >
-            
             <AnimatedBlurDots count={20} />
             <div
                 className="
-                    relative z-0 p-6    
+                    relative z-0 p-6
                     flex flex-col lg:flex-row
                     items-center md:items-center
                     justify-between
-                    w-full max-w-5xl
-                    lg:gap-20
+                    w-full max-w-2xl lg:max-w-5xl
+                    gap-10 md:gap-20
                     transition-all duration-300
                 "
             >
@@ -44,7 +43,7 @@ function Education({ education = [] }) {
                         transition-all duration-300
                         relative z-0
                     "
-                >   
+                >
                     <h3
                         className="
                             lg:hidden
@@ -54,7 +53,7 @@ function Education({ education = [] }) {
                             transition-all duration-300
                         "
                     >
-                        Education
+                        🎓 Education
                     </h3>
                     <div className="relative group transition-all duration-300 ">
                         <img
@@ -90,7 +89,7 @@ function Education({ education = [] }) {
                             transition-all duration-300
                         "
                     >
-                        Education
+                        🎓 Education
                     </h3>
                     <div
                         className="
@@ -103,7 +102,7 @@ function Education({ education = [] }) {
                             <div
                                 key={edu._id || index}
                                 className="
-                                    flex flex-col md:flex-row items-center md:items-start gap-4
+                                    flex flex-col md:flex-row items-center md:items-start gap-4 w-full
                                     p-6 bg-zinc-50/95 dark:bg-zinc-900/90 rounded-3xl
                                     shadow-md hover:shadow-lg transition-shadow duration-300
                                     border border-zinc-200 dark:border-zinc-800
@@ -124,12 +123,10 @@ function Education({ education = [] }) {
                                         draggable="false"
                                     />
                                 )}
-                                <div className="flex-1 flex flex-col">
+                                <div className="flex-1 flex flex-col items-center md:items-start">
                                     <h4
                                         className="
-                                            text-2xl md:text-3xl font-bold
-                                            mb-2 md:mb-4
-                                            text-blue-900 dark:text-blue-200
+                                            font-bold text-lg md:text-2xl text-blue-900 dark:text-blue-200 mb-1 text-center md:text-left
                                             transition-all duration-300
                                         "
                                     >
@@ -138,8 +135,7 @@ function Education({ education = [] }) {
                                     <p
                                         className="
                                             text-sm md:text-base text-zinc-800 dark:text-zinc-100
-                                            mb-2
-                                            font-semibold
+                                            mb-2 font-semibold text-center md:text-left
                                             transition-all duration-300
                                         "
                                     >
@@ -152,7 +148,7 @@ function Education({ education = [] }) {
                                     </p>
                                     <p
                                         className="
-                                            text-xs text-zinc-600 dark:text-zinc-400 font-mono mb-2
+                                            text-xs text-zinc-600 dark:text-zinc-400 font-mono mb-2 text-center md:text-left
                                             transition-all duration-300
                                         "
                                     >
@@ -196,7 +192,7 @@ Education.propTypes = {
             endDate: PropTypes.string.isRequired,
             grade: PropTypes.string,
             description: PropTypes.string,
-        })
+        }),
     ),
 };
 

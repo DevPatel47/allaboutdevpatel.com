@@ -55,7 +55,7 @@ const getPortfolioByUsername = asyncHandler(async (req, res) => {
     ] = await Promise.all([
         Introduction.findOne({ userId }).lean(),
         Skill.find({ userId }).lean(),
-        Project.find({ userId }).lean(),
+        Project.find({ userId, featured: true }).lean(),
         Education.find({ userId }).lean(),
         Experience.find({ userId }).lean(),
         Certification.find({ userId }).lean(),
