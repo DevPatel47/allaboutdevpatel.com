@@ -10,10 +10,24 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
+// Parse allowed origins from comma-separated env var or fallback to empty array
+const allowedOrigins = process.env.CORS_ORIGINS
+    ? process.env.CORS_ORIGINS.split(',').map((origin) => origin.trim())
+    : [];
+
 // Enable CORS with credentials and allowed origin from environment variable
 app.use(
     cors({
-        origin: process.env.CORS_ORIGIN || 'http://localhost:5173/',
+        origin: function (origin, callback) {
+            // allow requests with no origin (like curl, Postman, mobile apps)
+            if (!origin) return callback(null, true);
+
+            if (allowedOrigins.length && !allowedOrigins.includes(origin)) {
+                const msg = `The CORS policy for this site does not allow access from origin: ${origin}`;
+                return callback(new Error(msg), false);
+            }
+            return callback(null, true);
+        },
         credentials: true,
     }),
 );
@@ -58,6 +72,5 @@ app.get('*name', (req, res) => {
     }
     res.sendFile(path.join(distPath, 'index.html'));
 });
-
 
 export { app };
