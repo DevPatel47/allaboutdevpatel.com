@@ -75,7 +75,7 @@ function AboutMe({ description }) {
                     </p>
                     <div
                         className="
-                            w-full mt-6 flex flex-col items-start gap-2
+                            lg:hidden w-full mt-6 flex flex-col items-start gap-2
                             transition-all duration-300
                         "
                     >
@@ -156,7 +156,7 @@ function AboutMe({ description }) {
                             src={boyWithLaptop}
                             alt="Boy with Laptop"
                             className="
-                                w-44 h-44 sm:w-60 sm:h-60 md:w-72 md:h-72
+                                w-full h-auto sm:w-72 sm:h-72
                                 object-contain drop-shadow-2xl rounded-3xl
                                 bg-zinc-50 dark:bg-zinc-900 p-3
                                 border-4 border-zinc-300 dark:border-zinc-700
@@ -178,6 +178,63 @@ function AboutMe({ description }) {
                         >
                             {`<FullStack />`}
                         </div>
+                    </div>
+                    <div
+                        className="
+                            hidden lg:flex w-full mt-6 flex-col items-start gap-2
+                            transition-all duration-300
+                        "
+                    >
+                        <span
+                            className="
+                                text-xs font-mono text-zinc-700 dark:text-zinc-200
+                                bg-zinc-200/80 dark:bg-zinc-800 px-2 py-1 rounded
+                                transition-all duration-300
+                            "
+                        >
+                            {'// passionate about building things for the web'}
+                        </span>
+                        <span
+                            className="
+                                text-xs font-mono text-green-700 dark:text-green-300
+                                bg-zinc-200/80 dark:bg-zinc-800 px-2 py-1 rounded
+                                transition-all duration-300 flex items-center gap-1
+                            "
+                        >
+                            <span className="text-zinc-600 dark:text-zinc-400">$</span>
+                            <span className="animate-pulse">npm run build-my-dreams</span>
+                            <span className="text-zinc-400 dark:text-zinc-500">...</span>
+                        </span>
+                        <span
+                            className="
+                                text-xs font-mono text-green-800 dark:text-green-200
+                                bg-zinc-200/80 dark:bg-zinc-800 px-2 py-1 rounded
+                                transition-all duration-300 flex items-center gap-1
+                            "
+                        >
+                            <span>&#10003;</span>
+                            <span>Scored well in 12th</span>
+                        </span>
+                        <span
+                            className="
+                                text-xs font-mono text-blue-800 dark:text-blue-200
+                                bg-zinc-200/80 dark:bg-zinc-800 px-2 py-1 rounded
+                                transition-all duration-300 flex items-center gap-1
+                            "
+                        >
+                            <span>&#10148;</span>
+                            <span>Came to Canada</span>
+                        </span>
+                        <span
+                            className="
+                                text-xs font-mono text-indigo-800 dark:text-indigo-200
+                                bg-zinc-200/80 dark:bg-zinc-800 px-2 py-1 rounded
+                                transition-all duration-300 flex items-center gap-1
+                            "
+                        >
+                            <span>&#128187;</span>
+                            <span>Learning & building every day!</span>
+                        </span>
                     </div>
                 </div>
             </div>
