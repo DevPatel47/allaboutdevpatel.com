@@ -12,16 +12,17 @@ import TestimonialService from '../services/portfolio/testimonial.service.js';
 import { BgImage } from '../components/components.js';
 import { Loading } from './pages.js';
 
-const introSvc = IntroductionService;
-const eduSvc = EducationService;
-const expSvc = ExperienceService;
-const skillSvc = SkillService;
-const projSvc = ProjectService;
-const certSvc = CertificationService;
-const socSvc = SocialLinkService;
-const testiSvc = TestimonialService;
+/* Service singletons (exported instances) */
+const introductionService = IntroductionService;
+const educationService = EducationService;
+const experienceService = ExperienceService;
+const skillService = SkillService;
+const projectService = ProjectService;
+const certificationService = CertificationService;
+const socialLinkService = SocialLinkService;
+const testimonialService = TestimonialService;
 
-const TABS = [
+const ADMIN_TABS = [
     'Introduction',
     'Education',
     'Experience',
@@ -41,245 +42,253 @@ function Field({ label, children }) {
     );
 }
 
-function textInputProps(extra = '') {
+function inputClasses(extra = '') {
     return `px-3 py-2 rounded-lg bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-sm text-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500/40 ${extra}`;
 }
 
-function pill() {
-    return 'text-[10px] font-mono px-2 py-1 rounded bg-zinc-200 dark:bg-zinc-800';
-}
-
 function Admin() {
-    const [loading, setLoading] = useState(true);
-    const [user, setUser] = useState(null);
-    const [active, setActive] = useState('Introduction');
-    const [status, setStatus] = useState('');
-    const [intro, setIntro] = useState(null);
-    const [education, setEducation] = useState([]);
-    const [experience, setExperience] = useState([]);
-    const [skills, setSkills] = useState([]);
-    const [projects, setProjects] = useState([]);
-    const [certs, setCerts] = useState([]);
-    const [socials, setSocials] = useState([]);
-    const [testimonials, setTestimonials] = useState([]);
+    /* Auth / global */
+    const [isAuthorizing, setIsAuthorizing] = useState(true);
+    const [currentUser, setCurrentUser] = useState(null);
+    const [activeTab, setActiveTab] = useState('Introduction');
+    const [globalStatus, setGlobalStatus] = useState('');
+
+    /* Data state */
+    const [introduction, setIntroduction] = useState(null);
+    const [educationList, setEducationList] = useState([]);
+    const [experienceList, setExperienceList] = useState([]);
+    const [skillGroups, setSkillGroups] = useState([]);
+    const [projectList, setProjectList] = useState([]);
+    const [certificationList, setCertificationList] = useState([]);
+    const [socialLinks, setSocialLinks] = useState([]);
+    const [testimonialList, setTestimonialList] = useState([]);
+
+    /* Edit selection ids */
+    const [editEducationId, setEditEducationId] = useState(null);
+    const [editExperienceId, setEditExperienceId] = useState(null);
+    const [editSkillGroupId, setEditSkillGroupId] = useState(null);
+    const [editProjectId, setEditProjectId] = useState(null);
+    const [editCertificationId, setEditCertificationId] = useState(null);
+    const [editSocialLinkId, setEditSocialLinkId] = useState(null);
+    const [editTestimonialId, setEditTestimonialId] = useState(null);
 
     const navigate = useNavigate();
     const location = useLocation();
 
-    // Auth check
+    /* Authorization */
     useEffect(() => {
-        let active = true;
+        let mounted = true;
         (async () => {
             try {
-                const u = await UserService.getCurrentUser();
-                if (u.role !== 'admin') throw new Error('Not admin');
-                if (active) setUser(u);
+                const user = await UserService.getCurrentUser();
+                if (user.role !== 'admin') throw new Error('Not authorized');
+                if (mounted) setCurrentUser(user);
             } catch {
                 navigate('/login', { replace: true, state: { from: location.pathname } });
             } finally {
-                if (active) setLoading(false);
+                if (mounted) setIsAuthorizing(false);
             }
         })();
         return () => {
-            active = false;
+            mounted = false;
         };
     }, [navigate, location.pathname]);
 
-    const loadAll = useCallback(async (uid) => {
+    /* Load all content */
+    const loadAllContent = useCallback(async (userId) => {
         try {
-            setStatus('Loading data...');
-            const [i, edu, exp, skl, prj, c, soc, tst] = await Promise.allSettled([
-                introSvc.getByUserId(uid),
-                eduSvc.getByUserId(uid),
-                expSvc.getByUserId(uid),
-                skillSvc.getByUserId(uid),
-                projSvc.getByUserId(uid),
-                certSvc.getByUserId(uid),
-                socSvc.getByUserId(uid),
-                testiSvc.getByUserId(uid),
-            ]);
-            if (i.status === 'fulfilled') setIntro(i.value);
-            else setIntro(null);
-            if (edu.status === 'fulfilled') setEducation(edu.value);
-            if (exp.status === 'fulfilled') setExperience(exp.value);
-            if (skl.status === 'fulfilled') setSkills(skl.value);
-            if (prj.status === 'fulfilled') setProjects(prj.value);
-            if (c.status === 'fulfilled') setCerts(c.value);
-            if (soc.status === 'fulfilled') setSocials(soc.value);
-            if (tst.status === 'fulfilled') setTestimonials(tst.value);
-            setStatus('');
+            setGlobalStatus('Loading data...');
+            const [introRes, eduRes, expRes, skillRes, projRes, certRes, socialRes, testiRes] =
+                await Promise.allSettled([
+                    introductionService.getByUserId(userId),
+                    educationService.getByUserId(userId),
+                    experienceService.getByUserId(userId),
+                    skillService.getByUserId(userId),
+                    projectService.getByUserId(userId),
+                    certificationService.getByUserId(userId),
+                    socialLinkService.getByUserId(userId),
+                    testimonialService.getByUserId(userId),
+                ]);
+
+            setIntroduction(introRes.status === 'fulfilled' ? introRes.value : null);
+            if (eduRes.status === 'fulfilled') setEducationList(eduRes.value);
+            if (expRes.status === 'fulfilled') setExperienceList(expRes.value);
+            if (skillRes.status === 'fulfilled') setSkillGroups(skillRes.value);
+            if (projRes.status === 'fulfilled') setProjectList(projRes.value);
+            if (certRes.status === 'fulfilled') setCertificationList(certRes.value);
+            if (socialRes.status === 'fulfilled') setSocialLinks(socialRes.value);
+            if (testiRes.status === 'fulfilled') setTestimonialList(testiRes.value);
+
+            setGlobalStatus('');
         } catch (e) {
-            setStatus(e.message || 'Load error');
+            setGlobalStatus(e.message || 'Load error');
         }
     }, []);
 
     useEffect(() => {
-        if (user?._id) loadAll(user._id);
-    }, [user, loadAll]);
+        if (currentUser?._id) loadAllContent(currentUser._id);
+    }, [currentUser, loadAllContent]);
 
-    if (loading) return <Loading loadingMessage="Checking access..." />;
-    if (!user) return null;
+    if (isAuthorizing) return <Loading loadingMessage="Checking access..." />;
+    if (!currentUser) return null;
 
-    // Helpers
-    const submitIntro = async (e) => {
+    /* Introduction submit */
+    const handleSubmitIntroduction = async (e) => {
         e.preventDefault();
-        const fd = new FormData(e.target);
+        const formData = new FormData(e.target);
         try {
-            setStatus('Saving introduction...');
-            const svc = intro ? introSvc.update : introSvc.create;
-            const saved = await svc.call(introSvc, user._id, fd);
-            setIntro(saved);
-            setStatus('Introduction saved');
+            setGlobalStatus('Saving introduction...');
+            const method = introduction ? introductionService.update : introductionService.create;
+            const saved = await method.call(introductionService, currentUser._id, formData);
+            setIntroduction(saved);
+            setGlobalStatus('Introduction saved');
         } catch (err) {
-            setStatus(err.message);
+            setGlobalStatus(err.message);
         }
     };
 
-    const createSimple = (setter, list, createFn) => async (payload) => {
+    /* Generic helpers */
+    const createEntity = (setter, list, createFn) => async (payload) => {
         try {
-            setStatus('Creating...');
+            setGlobalStatus('Creating...');
             const created = await createFn(payload);
             setter([created, ...list]);
-            setStatus('Created');
+            setGlobalStatus('Created');
         } catch (e) {
-            setStatus(e.message);
+            setGlobalStatus(e.message);
         }
     };
 
-    const updateReplace = (setter, list, updateFn) => async (id, payload) => {
+    const updateEntity = (setter, list, updateFn) => async (id, payload) => {
         try {
-            setStatus('Updating...');
+            setGlobalStatus('Updating...');
             const updated = await updateFn(id, payload);
-            setter(list.map((i) => (i._id === updated._id ? updated : i)));
-            setStatus('Updated');
+            setter(list.map((item) => (item._id === updated._id ? updated : item)));
+            setGlobalStatus('Updated');
         } catch (e) {
-            setStatus(e.message);
+            setGlobalStatus(e.message);
         }
     };
 
-    const removeItem = (setter, list, delFn) => async (id) => {
+    const deleteEntity = (setter, list, deleteFn) => async (id) => {
         if (!confirm('Delete item?')) return;
         try {
-            setStatus('Deleting...');
-            await delFn(id);
-            setter(list.filter((i) => i._id !== id));
-            setStatus('Deleted');
+            setGlobalStatus('Deleting...');
+            await deleteFn(id);
+            setter(list.filter((item) => item._id !== id));
+            setGlobalStatus('Deleted');
         } catch (e) {
-            setStatus(e.message);
+            setGlobalStatus(e.message);
         }
     };
 
-    // Creation handlers
-    const addEducation = createSimple(setEducation, education, async (form) => {
+    /* Create handlers */
+    const handleCreateEducation = createEntity(setEducationList, educationList, async (form) => {
         const fd = new FormData();
         Object.entries(form).forEach(([k, v]) => v && fd.append(k, v));
-        return await eduSvc.create(user._id, fd);
+        return educationService.create(currentUser._id, fd);
     });
 
-    const addExperience = createSimple(setExperience, experience, async (form) => {
+    const handleCreateExperience = createEntity(setExperienceList, experienceList, async (form) => {
         const fd = new FormData();
         Object.entries(form).forEach(([k, v]) => v && fd.append(k, v));
-        return await expSvc.create(user._id, fd);
+        return experienceService.create(currentUser._id, fd);
     });
 
-    const addSkill = createSimple(setSkills, skills, async (form) => {
-        // backend expects "skills" as comma separated "Name:Level"
+    const handleCreateSkillGroup = createEntity(setSkillGroups, skillGroups, async (form) => {
         const payload = {
             category: form.category,
             skills: form.skills
                 .split(',')
                 .map((s) => s.trim())
                 .filter(Boolean)
-                .join(','), // pass through
+                .join(','),
         };
-        const r = await skillSvc.create(user._id, payload);
-        return r;
+        return skillService.create(currentUser._id, payload);
     });
 
-    const addProject = createSimple(setProjects, projects, async (form) => {
+    const handleCreateProject = createEntity(setProjectList, projectList, async (form) => {
         const fd = new FormData();
         Object.entries(form).forEach(([k, v]) => v && fd.append(k, v));
-        return await projSvc.create(user._id, fd);
+        return projectService.create(currentUser._id, fd);
     });
 
-    const addCert = createSimple(setCerts, certs, async (form) => {
-        const fd = new FormData();
-        Object.entries(form).forEach(([k, v]) => v && fd.append(k, v));
-        return await certSvc.create(user._id, fd);
-    });
-
-    const addSocial = createSimple(setSocials, socials, async (form) => {
-        return await socSvc.create(user._id, form);
-    });
-
-    const addTestimonial = createSimple(setTestimonials, testimonials, async (form) => {
-        const fd = new FormData();
-        Object.entries(form).forEach(([k, v]) => v && fd.append(k, v));
-        return await testiSvc.create(user._id, fd);
-    });
-
-    // Delete handlers
-    const delEducation = removeItem(setEducation, education, (id) => eduSvc.delete(id));
-    const delExperience = removeItem(setExperience, experience, (id) => expSvc.delete(id));
-    const delSkill = removeItem(setSkills, skills, (id) => skillSvc.delete(id));
-    const delProject = removeItem(setProjects, projects, (id) => projSvc.delete(id));
-    const delCert = removeItem(setCerts, certs, (id) => certSvc.delete(id));
-    const delSocial = removeItem(setSocials, socials, (id) => socSvc.delete(id));
-    const delTestimonial = removeItem(setTestimonials, testimonials, (id) => testiSvc.delete(id));
-
-    // Renderers (compact)
-    const renderIntro = () => (
-        <form onSubmit={submitIntro} className="flex flex-col gap-4">
-            <div className="grid md:grid-cols-2 gap-4">
-                <Field label="Greeting">
-                    <input
-                        name="greeting"
-                        defaultValue={intro?.greeting || ''}
-                        className={textInputProps()}
-                        required
-                    />
-                </Field>
-                <Field label="Name">
-                    <input
-                        name="name"
-                        defaultValue={intro?.name || ''}
-                        className={textInputProps()}
-                        required
-                    />
-                </Field>
-                <Field label="Tagline">
-                    <input
-                        name="tagline"
-                        defaultValue={intro?.tagline || ''}
-                        className={textInputProps()}
-                        required
-                    />
-                </Field>
-                <Field label="Profile Image (file)">
-                    <input type="file" name="profileImage" className="text-xs" />
-                </Field>
-                <Field label="Resume (file)">
-                    <input type="file" name="resume" className="text-xs" />
-                </Field>
-                <Field label="Description">
-                    <textarea
-                        name="description"
-                        rows="4"
-                        defaultValue={intro?.description || ''}
-                        className={textInputProps()}
-                        required
-                    />
-                </Field>
-            </div>
-            <button className="self-end px-5 py-2 rounded-lg bg-zinc-900 dark:bg-zinc-50 text-zinc-50 dark:text-zinc-900 text-sm">
-                {intro ? 'Update' : 'Create'}
-            </button>
-        </form>
+    const handleCreateCertification = createEntity(
+        setCertificationList,
+        certificationList,
+        async (form) => {
+            const fd = new FormData();
+            Object.entries(form).forEach(([k, v]) => v && fd.append(k, v));
+            return certificationService.create(currentUser._id, fd);
+        },
     );
 
-    const SimpleCreate = ({ title, fields, onCreate }) => {
+    const handleCreateSocialLink = createEntity(setSocialLinks, socialLinks, async (form) =>
+        socialLinkService.create(currentUser._id, form),
+    );
+
+    const handleCreateTestimonial = createEntity(
+        setTestimonialList,
+        testimonialList,
+        async (form) => {
+            const fd = new FormData();
+            Object.entries(form).forEach(([k, v]) => v && fd.append(k, v));
+            return testimonialService.create(currentUser._id, fd);
+        },
+    );
+
+    /* Update handlers */
+    const handleUpdateEducation = updateEntity(setEducationList, educationList, (id, fd) =>
+        educationService.update(id, fd),
+    );
+    const handleUpdateExperience = updateEntity(setExperienceList, experienceList, (id, fd) =>
+        experienceService.update(id, fd),
+    );
+    const handleUpdateSkillGroup = updateEntity(setSkillGroups, skillGroups, (id, payload) =>
+        skillService.update(id, payload),
+    );
+    const handleUpdateProject = updateEntity(setProjectList, projectList, (id, fd) =>
+        projectService.update(id, fd),
+    );
+    const handleUpdateCertification = updateEntity(
+        setCertificationList,
+        certificationList,
+        (id, fd) => certificationService.update(id, fd),
+    );
+    const handleUpdateSocialLink = updateEntity(setSocialLinks, socialLinks, (id, payload) =>
+        socialLinkService.update(id, payload),
+    );
+    const handleUpdateTestimonial = updateEntity(setTestimonialList, testimonialList, (id, fd) =>
+        testimonialService.update(id, fd),
+    );
+
+    /* Delete handlers */
+    const handleDeleteEducation = deleteEntity(setEducationList, educationList, (id) =>
+        educationService.delete(id),
+    );
+    const handleDeleteExperience = deleteEntity(setExperienceList, experienceList, (id) =>
+        experienceService.delete(id),
+    );
+    const handleDeleteSkillGroup = deleteEntity(setSkillGroups, skillGroups, (id) =>
+        skillService.delete(id),
+    );
+    const handleDeleteProject = deleteEntity(setProjectList, projectList, (id) =>
+        projectService.delete(id),
+    );
+    const handleDeleteCertification = deleteEntity(setCertificationList, certificationList, (id) =>
+        certificationService.delete(id),
+    );
+    const handleDeleteSocialLink = deleteEntity(setSocialLinks, socialLinks, (id) =>
+        socialLinkService.delete(id),
+    );
+    const handleDeleteTestimonial = deleteEntity(setTestimonialList, testimonialList, (id) =>
+        testimonialService.delete(id),
+    );
+
+    /* Reusable create form */
+    const CreateSection = ({ label, fields, onCreate }) => {
         const [open, setOpen] = useState(false);
-        const [form, setForm] = useState({});
+        const [formState, setFormState] = useState({});
         return (
             <div className="mb-6">
                 <button
@@ -287,14 +296,14 @@ function Admin() {
                     onClick={() => setOpen((o) => !o)}
                     className="mb-3 text-xs font-mono px-3 py-1 rounded bg-zinc-900 dark:bg-zinc-100 text-zinc-100 dark:text-zinc-900"
                 >
-                    {open ? 'Close' : `Add ${title}`}
+                    {open ? 'Close' : `Add ${label}`}
                 </button>
                 {open && (
                     <form
                         onSubmit={async (e) => {
                             e.preventDefault();
-                            await onCreate(form);
-                            setForm({});
+                            await onCreate(formState);
+                            setFormState({});
                             setOpen(false);
                         }}
                         className="grid md:grid-cols-2 gap-4 p-4 border border-zinc-200 dark:border-zinc-700 rounded-xl bg-zinc-50/70 dark:bg-zinc-900/70"
@@ -304,12 +313,12 @@ function Admin() {
                                 {f.type === 'textarea' ? (
                                     <textarea
                                         rows={f.rows || 3}
-                                        value={form[f.name] || ''}
-                                        required={f.req}
+                                        value={formState[f.name] || ''}
+                                        required={f.required}
                                         onChange={(e) =>
-                                            setForm({ ...form, [f.name]: e.target.value })
+                                            setFormState({ ...formState, [f.name]: e.target.value })
                                         }
-                                        className={textInputProps()}
+                                        className={inputClasses()}
                                         name={f.name}
                                     />
                                 ) : f.type === 'file' ? (
@@ -317,22 +326,25 @@ function Admin() {
                                         type="file"
                                         name={f.name}
                                         onChange={(e) =>
-                                            setForm({ ...form, [f.name]: e.target.files[0] })
+                                            setFormState({
+                                                ...formState,
+                                                [f.name]: e.target.files[0],
+                                            })
                                         }
                                         className="text-xs"
-                                        required={f.req}
+                                        required={f.required}
                                         accept={f.accept || '*'}
                                     />
                                 ) : (
                                     <input
                                         type={f.type || 'text'}
                                         name={f.name}
-                                        value={form[f.name] || ''}
-                                        required={f.req}
+                                        value={formState[f.name] || ''}
+                                        required={f.required}
                                         onChange={(e) =>
-                                            setForm({ ...form, [f.name]: e.target.value })
+                                            setFormState({ ...formState, [f.name]: e.target.value })
                                         }
-                                        className={textInputProps()}
+                                        className={inputClasses()}
                                         placeholder={f.placeholder}
                                     />
                                 )}
@@ -349,190 +361,528 @@ function Admin() {
         );
     };
 
-    const listCard = (item, lines, onDelete) => (
-        <div
-            key={item._id}
-            className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-100/70 dark:bg-zinc-800/60 flex flex-col gap-1"
-        >
-            {lines.map((l, i) => (
+    /* Inline edit row */
+    const EditRow = ({ fields, entity, onCancel, onSave, hasFile = false }) => {
+        const [formState, setFormState] = useState(() => {
+            const base = {};
+            fields.forEach((f) => {
+                base[f.name] = f.type === 'file' ? null : entity[f.name] ?? '';
+            });
+            return base;
+        });
+
+        return (
+            <form
+                onSubmit={async (e) => {
+                    e.preventDefault();
+                    let payload;
+                    if (hasFile) {
+                        payload = new FormData();
+                        Object.entries(formState).forEach(([k, v]) => {
+                            if (v !== null && v !== '') payload.append(k, v);
+                        });
+                    } else {
+                        payload = formState;
+                    }
+                    await onSave(entity._id, payload);
+                    onCancel();
+                }}
+                className="flex flex-col gap-3 p-4 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50/80 dark:bg-zinc-800/60"
+            >
+                <div className="grid md:grid-cols-2 gap-4">
+                    {fields.map((f) => (
+                        <Field key={f.name} label={f.label}>
+                            {f.type === 'textarea' ? (
+                                <textarea
+                                    rows={f.rows || 3}
+                                    value={formState[f.name] || ''}
+                                    onChange={(e) =>
+                                        setFormState({ ...formState, [f.name]: e.target.value })
+                                    }
+                                    className={inputClasses()}
+                                />
+                            ) : f.type === 'file' ? (
+                                <input
+                                    type="file"
+                                    onChange={(e) =>
+                                        setFormState({ ...formState, [f.name]: e.target.files[0] })
+                                    }
+                                    className="text-xs"
+                                    accept={f.accept || '*'}
+                                />
+                            ) : f.type === 'date' ? (
+                                <input
+                                    type="date"
+                                    value={(formState[f.name] || '').slice(0, 10)}
+                                    onChange={(e) =>
+                                        setFormState({ ...formState, [f.name]: e.target.value })
+                                    }
+                                    className={inputClasses()}
+                                />
+                            ) : (
+                                <input
+                                    type="text"
+                                    value={formState[f.name] || ''}
+                                    onChange={(e) =>
+                                        setFormState({ ...formState, [f.name]: e.target.value })
+                                    }
+                                    className={inputClasses()}
+                                />
+                            )}
+                        </Field>
+                    ))}
+                </div>
+                <div className="flex justify-end gap-2">
+                    <button
+                        type="button"
+                        onClick={onCancel}
+                        className="px-4 py-2 rounded-lg text-xs bg-zinc-300 dark:bg-zinc-700 text-zinc-800 dark:text-zinc-100"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        type="submit"
+                        className="px-5 py-2 rounded-lg bg-blue-600 text-white text-xs"
+                    >
+                        Save
+                    </button>
+                </div>
+            </form>
+        );
+    };
+
+    /* Display card */
+    const EntityCard = ({ entity, lines, onDelete, onBeginEdit }) => (
+        <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-100/70 dark:bg-zinc-800/60 flex flex-col gap-2">
+            {lines.map((text, i) => (
                 <div key={i} className="text-xs text-zinc-700 dark:text-zinc-300 break-words">
-                    {l}
+                    {text}
                 </div>
             ))}
-            <button
-                onClick={() => onDelete(item._id)}
-                className="self-end mt-1 text-[10px] px-2 py-1 rounded bg-red-600 text-white"
-            >
-                Delete
-            </button>
+            <div className="flex gap-2 self-end">
+                {onBeginEdit && (
+                    <button
+                        onClick={onBeginEdit}
+                        className="text-[10px] px-2 py-1 rounded bg-amber-500 text-white"
+                    >
+                        Edit
+                    </button>
+                )}
+                <button
+                    onClick={onDelete}
+                    className="text-[10px] px-2 py-1 rounded bg-red-600 text-white"
+                >
+                    Delete
+                </button>
+            </div>
         </div>
     );
 
-    const tabBody = () => {
-        switch (active) {
+    /* Tab content */
+    const renderTabBody = () => {
+        switch (activeTab) {
             case 'Introduction':
-                return renderIntro();
+                return (
+                    <form onSubmit={handleSubmitIntroduction} className="flex flex-col gap-4">
+                        <div className="grid md:grid-cols-2 gap-4">
+                            <Field label="Greeting">
+                                <input
+                                    name="greeting"
+                                    defaultValue={introduction?.greeting || ''}
+                                    className={inputClasses()}
+                                    required
+                                />
+                            </Field>
+                            <Field label="Name">
+                                <input
+                                    name="name"
+                                    defaultValue={introduction?.name || ''}
+                                    className={inputClasses()}
+                                    required
+                                />
+                            </Field>
+                            <Field label="Tagline">
+                                <input
+                                    name="tagline"
+                                    defaultValue={introduction?.tagline || ''}
+                                    className={inputClasses()}
+                                    required
+                                />
+                            </Field>
+                            <Field label="Profile Image (file)">
+                                <input type="file" name="profileImage" className="text-xs" />
+                            </Field>
+                            <Field label="Resume (file)">
+                                <input type="file" name="resume" className="text-xs" />
+                            </Field>
+                            <Field label="Description">
+                                <textarea
+                                    name="description"
+                                    rows="4"
+                                    defaultValue={introduction?.description || ''}
+                                    className={inputClasses()}
+                                    required
+                                />
+                            </Field>
+                        </div>
+                        <button className="self-end px-5 py-2 rounded-lg bg-zinc-900 dark:bg-zinc-50 text-zinc-50 dark:text-zinc-900 text-sm">
+                            {introduction ? 'Update' : 'Create'}
+                        </button>
+                    </form>
+                );
+
             case 'Education':
                 return (
                     <>
-                        <SimpleCreate
-                            title="Education"
-                            onCreate={addEducation}
+                        <CreateSection
+                            label="Education"
+                            onCreate={handleCreateEducation}
                             fields={[
-                                { name: 'institution', label: 'Institution', req: true },
-                                { name: 'degree', label: 'Degree', req: true },
-                                { name: 'fieldOfStudy', label: 'Field', req: true },
-                                { name: 'startDate', label: 'Start Date', type: 'date', req: true },
+                                { name: 'institution', label: 'Institution', required: true },
+                                { name: 'degree', label: 'Degree', required: true },
+                                { name: 'fieldOfStudy', label: 'Field', required: true },
+                                {
+                                    name: 'startDate',
+                                    label: 'Start Date',
+                                    type: 'date',
+                                    required: true,
+                                },
                                 { name: 'endDate', label: 'End Date', type: 'date' },
-                                { name: 'grade', label: 'Grade', req: true },
+                                { name: 'grade', label: 'Grade', required: true },
                                 { name: 'logo', label: 'Logo', type: 'file', accept: 'image/*' },
                                 {
                                     name: 'description',
                                     label: 'Description',
                                     type: 'textarea',
-                                    req: true,
+                                    required: true,
                                 },
                             ]}
                         />
                         <div className="grid md:grid-cols-2 gap-4">
-                            {education.map((e) =>
-                                listCard(
-                                    e,
-                                    [
-                                        `${e.institution} - ${e.degree}`,
-                                        `${new Date(e.startDate).toLocaleDateString()} → ${
-                                            e.endDate
-                                                ? new Date(e.endDate).toLocaleDateString()
-                                                : 'Present'
-                                        }`,
-                                    ],
-                                    delEducation,
+                            {educationList.map((item) =>
+                                item._id === editEducationId ? (
+                                    <EditRow
+                                        key={item._id}
+                                        entity={item}
+                                        onCancel={() => setEditEducationId(null)}
+                                        onSave={async (id, payload) => {
+                                            if (!(payload instanceof FormData)) {
+                                                const fd = new FormData();
+                                                Object.entries(payload).forEach(([k, v]) =>
+                                                    fd.append(k, v),
+                                                );
+                                                payload = fd;
+                                            }
+                                            await handleUpdateEducation(id, payload);
+                                        }}
+                                        hasFile
+                                        fields={[
+                                            { name: 'institution', label: 'Institution' },
+                                            { name: 'degree', label: 'Degree' },
+                                            { name: 'fieldOfStudy', label: 'Field' },
+                                            {
+                                                name: 'startDate',
+                                                label: 'Start Date',
+                                                type: 'date',
+                                            },
+                                            { name: 'endDate', label: 'End Date', type: 'date' },
+                                            { name: 'grade', label: 'Grade' },
+                                            {
+                                                name: 'logo',
+                                                label: 'Logo',
+                                                type: 'file',
+                                                accept: 'image/*',
+                                            },
+                                            {
+                                                name: 'description',
+                                                label: 'Description',
+                                                type: 'textarea',
+                                            },
+                                        ]}
+                                    />
+                                ) : (
+                                    <EntityCard
+                                        key={item._id}
+                                        entity={item}
+                                        lines={[
+                                            `${item.institution} - ${item.degree}`,
+                                            `${new Date(item.startDate).toLocaleDateString()} → ${
+                                                item.endDate
+                                                    ? new Date(item.endDate).toLocaleDateString()
+                                                    : 'Present'
+                                            }`,
+                                        ]}
+                                        onDelete={() => handleDeleteEducation(item._id)}
+                                        onBeginEdit={() => setEditEducationId(item._id)}
+                                    />
                                 ),
                             )}
                         </div>
                     </>
                 );
+
             case 'Experience':
                 return (
                     <>
-                        <SimpleCreate
-                            title="Experience"
-                            onCreate={addExperience}
+                        <CreateSection
+                            label="Experience"
+                            onCreate={handleCreateExperience}
                             fields={[
-                                { name: 'title', label: 'Title', req: true },
-                                { name: 'company', label: 'Company', req: true },
-                                { name: 'location', label: 'Location', req: true },
-                                { name: 'startDate', label: 'Start Date', type: 'date', req: true },
+                                { name: 'title', label: 'Title', required: true },
+                                { name: 'company', label: 'Company', required: true },
+                                { name: 'location', label: 'Location', required: true },
+                                {
+                                    name: 'startDate',
+                                    label: 'Start Date',
+                                    type: 'date',
+                                    required: true,
+                                },
                                 { name: 'endDate', label: 'End Date', type: 'date' },
                                 {
                                     name: 'responsibilities',
                                     label: 'Responsibilities (comma)',
-                                    req: true,
+                                    required: true,
                                     placeholder: 'Design,Build',
                                 },
                                 {
                                     name: 'techStack',
                                     label: 'Tech Stack (comma)',
-                                    req: true,
+                                    required: true,
                                     placeholder: 'React,Node',
                                 },
                                 { name: 'logo', label: 'Logo', type: 'file', accept: 'image/*' },
                             ]}
                         />
                         <div className="grid md:grid-cols-2 gap-4">
-                            {experience.map((x) =>
-                                listCard(
-                                    x,
-                                    [
-                                        `${x.title} @ ${x.company}`,
-                                        `${new Date(x.startDate).toLocaleDateString()} → ${
-                                            x.endDate
-                                                ? new Date(x.endDate).toLocaleDateString()
-                                                : 'Present'
-                                        }`,
-                                        x.techStack.join(', '),
-                                    ],
-                                    delExperience,
+                            {experienceList.map((item) =>
+                                item._id === editExperienceId ? (
+                                    <EditRow
+                                        key={item._id}
+                                        entity={item}
+                                        onCancel={() => setEditExperienceId(null)}
+                                        onSave={async (id, payload) => {
+                                            if (!(payload instanceof FormData)) {
+                                                const fd = new FormData();
+                                                Object.entries(payload).forEach(([k, v]) =>
+                                                    fd.append(k, v),
+                                                );
+                                                payload = fd;
+                                            }
+                                            await handleUpdateExperience(id, payload);
+                                        }}
+                                        hasFile
+                                        fields={[
+                                            { name: 'title', label: 'Title' },
+                                            { name: 'company', label: 'Company' },
+                                            { name: 'location', label: 'Location' },
+                                            {
+                                                name: 'startDate',
+                                                label: 'Start Date',
+                                                type: 'date',
+                                            },
+                                            { name: 'endDate', label: 'End Date', type: 'date' },
+                                            {
+                                                name: 'responsibilities',
+                                                label: 'Responsibilities',
+                                                type: 'textarea',
+                                            },
+                                            { name: 'techStack', label: 'Tech Stack' },
+                                            {
+                                                name: 'logo',
+                                                label: 'Logo',
+                                                type: 'file',
+                                                accept: 'image/*',
+                                            },
+                                        ]}
+                                    />
+                                ) : (
+                                    <EntityCard
+                                        key={item._id}
+                                        entity={item}
+                                        lines={[
+                                            `${item.title} @ ${item.company}`,
+                                            `${new Date(item.startDate).toLocaleDateString()} → ${
+                                                item.endDate
+                                                    ? new Date(item.endDate).toLocaleDateString()
+                                                    : 'Present'
+                                            }`,
+                                            item.techStack.join(', '),
+                                        ]}
+                                        onDelete={() => handleDeleteExperience(item._id)}
+                                        onBeginEdit={() => setEditExperienceId(item._id)}
+                                    />
                                 ),
                             )}
                         </div>
                     </>
                 );
+
             case 'Skills':
                 return (
                     <>
-                        <SimpleCreate
-                            title="Skill Group"
-                            onCreate={addSkill}
+                        <CreateSection
+                            label="Skill Group"
+                            onCreate={handleCreateSkillGroup}
                             fields={[
-                                { name: 'category', label: 'Category', req: true },
+                                { name: 'category', label: 'Category', required: true },
                                 {
                                     name: 'skills',
                                     label: 'Skills Name:Level,...',
-                                    req: true,
+                                    required: true,
                                     placeholder: 'HTML:Beginner, CSS:Intermediate',
                                 },
                             ]}
                         />
                         <div className="grid md:grid-cols-2 gap-4">
-                            {skills.map((s) =>
-                                listCard(
-                                    s,
-                                    [
-                                        s.category,
-                                        s.skills.map((k) => `${k.name}(${k.level})`).join(', '),
-                                    ],
-                                    delSkill,
+                            {skillGroups.map((group) =>
+                                group._id === editSkillGroupId ? (
+                                    <EditRow
+                                        key={group._id}
+                                        entity={{
+                                            ...group,
+                                            skills: group.skills
+                                                .map((s) => `${s.name}:${s.level}`)
+                                                .join(', '),
+                                        }}
+                                        onCancel={() => setEditSkillGroupId(null)}
+                                        onSave={async (id, payload) => {
+                                            await handleUpdateSkillGroup(id, {
+                                                category: payload.category,
+                                                skills: payload.skills,
+                                            });
+                                        }}
+                                        fields={[
+                                            { name: 'category', label: 'Category' },
+                                            {
+                                                name: 'skills',
+                                                label: 'Skills Name:Level,...',
+                                                type: 'textarea',
+                                            },
+                                        ]}
+                                    />
+                                ) : (
+                                    <EntityCard
+                                        key={group._id}
+                                        entity={group}
+                                        lines={[
+                                            group.category,
+                                            group.skills
+                                                .map((s) => `${s.name}(${s.level})`)
+                                                .join(', '),
+                                        ]}
+                                        onDelete={() => handleDeleteSkillGroup(group._id)}
+                                        onBeginEdit={() => setEditSkillGroupId(group._id)}
+                                    />
                                 ),
                             )}
                         </div>
                     </>
                 );
+
             case 'Projects':
                 return (
                     <>
-                        <SimpleCreate
-                            title="Project"
-                            onCreate={addProject}
+                        <CreateSection
+                            label="Project"
+                            onCreate={handleCreateProject}
                             fields={[
-                                { name: 'title', label: 'Title', req: true },
+                                { name: 'title', label: 'Title', required: true },
                                 {
                                     name: 'slug',
                                     label: 'Slug',
-                                    req: true,
+                                    required: true,
                                     placeholder: 'unique-slug',
                                 },
                                 {
                                     name: 'description',
                                     label: 'Description',
                                     type: 'textarea',
-                                    req: true,
+                                    required: true,
                                 },
-                                { name: 'techStack', label: 'Tech Stack (comma)', req: true },
-                                { name: 'video', label: 'Video URL', req: true },
-                                { name: 'liveLink', label: 'Live Link', req: true },
-                                { name: 'repoLink', label: 'Repo Link', req: true },
-                                { name: 'tags', label: 'Tags (comma)', req: true },
+                                { name: 'techStack', label: 'Tech Stack (comma)', required: true },
+                                { name: 'video', label: 'Video URL', required: true },
+                                { name: 'liveLink', label: 'Live Link', required: true },
+                                { name: 'repoLink', label: 'Repo Link', required: true },
+                                { name: 'tags', label: 'Tags (comma)', required: true },
                                 { name: 'image', label: 'Image', type: 'file', accept: 'image/*' },
                             ]}
                         />
                         <div className="grid md:grid-cols-2 gap-4">
-                            {projects.map((p) =>
-                                listCard(p, [p.title, p.slug, p.techStack.join(', ')], delProject),
+                            {projectList.map((project) =>
+                                project._id === editProjectId ? (
+                                    <EditRow
+                                        key={project._id}
+                                        entity={{
+                                            ...project,
+                                            techStack: project.techStack.join(', '),
+                                            tags: project.tags.join(', '),
+                                        }}
+                                        onCancel={() => setEditProjectId(null)}
+                                        onSave={async (id, payload) => {
+                                            if (!(payload instanceof FormData)) {
+                                                const fd = new FormData();
+                                                Object.entries(payload).forEach(([k, v]) =>
+                                                    fd.append(k, v),
+                                                );
+                                                payload = fd;
+                                            }
+                                            await handleUpdateProject(id, payload);
+                                        }}
+                                        hasFile
+                                        fields={[
+                                            { name: 'title', label: 'Title' },
+                                            { name: 'slug', label: 'Slug' },
+                                            {
+                                                name: 'description',
+                                                label: 'Description',
+                                                type: 'textarea',
+                                            },
+                                            { name: 'techStack', label: 'Tech Stack (comma)' },
+                                            { name: 'video', label: 'Video URL' },
+                                            { name: 'liveLink', label: 'Live Link' },
+                                            { name: 'repoLink', label: 'Repo Link' },
+                                            { name: 'tags', label: 'Tags (comma)' },
+                                            {
+                                                name: 'image',
+                                                label: 'Image',
+                                                type: 'file',
+                                                accept: 'image/*',
+                                            },
+                                        ]}
+                                    />
+                                ) : (
+                                    <EntityCard
+                                        key={project._id}
+                                        entity={project}
+                                        lines={[
+                                            project.title,
+                                            project.slug,
+                                            project.techStack.join(', '),
+                                        ]}
+                                        onDelete={() => handleDeleteProject(project._id)}
+                                        onBeginEdit={() => setEditProjectId(project._id)}
+                                    />
+                                ),
                             )}
                         </div>
                     </>
                 );
+
             case 'Certifications':
                 return (
                     <>
-                        <SimpleCreate
-                            title="Certification"
-                            onCreate={addCert}
+                        <CreateSection
+                            label="Certification"
+                            onCreate={handleCreateCertification}
                             fields={[
-                                { name: 'title', label: 'Title', req: true },
-                                { name: 'provider', label: 'Provider', req: true },
-                                { name: 'issueDate', label: 'Issue Date', type: 'date', req: true },
+                                { name: 'title', label: 'Title', required: true },
+                                { name: 'provider', label: 'Provider', required: true },
+                                {
+                                    name: 'issueDate',
+                                    label: 'Issue Date',
+                                    type: 'date',
+                                    required: true,
+                                },
                                 { name: 'credentialId', label: 'Credential ID' },
                                 { name: 'credentialUrl', label: 'Credential URL' },
                                 {
@@ -544,67 +894,168 @@ function Admin() {
                             ]}
                         />
                         <div className="grid md:grid-cols-2 gap-4">
-                            {certs.map((c) =>
-                                listCard(
-                                    c,
-                                    [
-                                        c.title,
-                                        c.provider,
-                                        new Date(c.issueDate).toLocaleDateString(),
-                                    ],
-                                    delCert,
+                            {certificationList.map((cert) =>
+                                cert._id === editCertificationId ? (
+                                    <EditRow
+                                        key={cert._id}
+                                        entity={cert}
+                                        onCancel={() => setEditCertificationId(null)}
+                                        onSave={async (id, payload) => {
+                                            if (!(payload instanceof FormData)) {
+                                                const fd = new FormData();
+                                                Object.entries(payload).forEach(([k, v]) =>
+                                                    fd.append(k, v),
+                                                );
+                                                payload = fd;
+                                            }
+                                            await handleUpdateCertification(id, payload);
+                                        }}
+                                        hasFile
+                                        fields={[
+                                            { name: 'title', label: 'Title' },
+                                            { name: 'provider', label: 'Provider' },
+                                            {
+                                                name: 'issueDate',
+                                                label: 'Issue Date',
+                                                type: 'date',
+                                            },
+                                            { name: 'credentialId', label: 'Credential ID' },
+                                            { name: 'credentialUrl', label: 'Credential URL' },
+                                            {
+                                                name: 'badgeImage',
+                                                label: 'Badge Image',
+                                                type: 'file',
+                                                accept: 'image/*',
+                                            },
+                                        ]}
+                                    />
+                                ) : (
+                                    <EntityCard
+                                        key={cert._id}
+                                        entity={cert}
+                                        lines={[
+                                            cert.title,
+                                            cert.provider,
+                                            new Date(cert.issueDate).toLocaleDateString(),
+                                        ]}
+                                        onDelete={() => handleDeleteCertification(cert._id)}
+                                        onBeginEdit={() => setEditCertificationId(cert._id)}
+                                    />
                                 ),
                             )}
                         </div>
                     </>
                 );
+
             case 'Social Links':
                 return (
                     <>
-                        <SimpleCreate
-                            title="Social Link"
-                            onCreate={addSocial}
+                        <CreateSection
+                            label="Social Link"
+                            onCreate={handleCreateSocialLink}
                             fields={[
-                                { name: 'platform', label: 'Platform', req: true },
-                                { name: 'url', label: 'URL', req: true },
-                                { name: 'icon', label: 'Icon (optional)' },
+                                { name: 'platform', label: 'Platform', required: true },
+                                { name: 'url', label: 'URL', required: true },
+                                { name: 'icon', label: 'Icon' },
                             ]}
                         />
                         <div className="grid md:grid-cols-2 gap-4">
-                            {socials.map((s) => listCard(s, [s.platform, s.url], delSocial))}
+                            {socialLinks.map((link) =>
+                                link._id === editSocialLinkId ? (
+                                    <EditRow
+                                        key={link._id}
+                                        entity={link}
+                                        onCancel={() => setEditSocialLinkId(null)}
+                                        onSave={handleUpdateSocialLink}
+                                        fields={[
+                                            { name: 'platform', label: 'Platform' },
+                                            { name: 'url', label: 'URL' },
+                                            { name: 'icon', label: 'Icon' },
+                                        ]}
+                                    />
+                                ) : (
+                                    <EntityCard
+                                        key={link._id}
+                                        entity={link}
+                                        lines={[link.platform, link.url]}
+                                        onDelete={() => handleDeleteSocialLink(link._id)}
+                                        onBeginEdit={() => setEditSocialLinkId(link._id)}
+                                    />
+                                ),
+                            )}
                         </div>
                     </>
                 );
+
             case 'Testimonials':
                 return (
                     <>
-                        <SimpleCreate
-                            title="Testimonial"
-                            onCreate={addTestimonial}
+                        <CreateSection
+                            label="Testimonial"
+                            onCreate={handleCreateTestimonial}
                             fields={[
-                                { name: 'name', label: 'Name', req: true },
-                                { name: 'role', label: 'Role', req: true },
+                                { name: 'name', label: 'Name', required: true },
+                                { name: 'role', label: 'Role', required: true },
                                 { name: 'linkedIn', label: 'LinkedIn' },
-                                { name: 'content', label: 'Content', type: 'textarea', req: true },
+                                {
+                                    name: 'content',
+                                    label: 'Content',
+                                    type: 'textarea',
+                                    required: true,
+                                },
                                 { name: 'image', label: 'Image', type: 'file', accept: 'image/*' },
                             ]}
                         />
                         <div className="grid md:grid-cols-2 gap-4">
-                            {testimonials.map((t) =>
-                                listCard(
-                                    t,
-                                    [
-                                        t.name,
-                                        t.role,
-                                        t.content.slice(0, 60) +
-                                            (t.content.length > 60 ? '...' : ''),
-                                    ],
-                                    delTestimonial,
+                            {testimonialList.map((t) =>
+                                t._id === editTestimonialId ? (
+                                    <EditRow
+                                        key={t._id}
+                                        entity={t}
+                                        onCancel={() => setEditTestimonialId(null)}
+                                        onSave={async (id, payload) => {
+                                            if (!(payload instanceof FormData)) {
+                                                const fd = new FormData();
+                                                Object.entries(payload).forEach(([k, v]) =>
+                                                    fd.append(k, v),
+                                                );
+                                                payload = fd;
+                                            }
+                                            await handleUpdateTestimonial(id, payload);
+                                        }}
+                                        hasFile
+                                        fields={[
+                                            { name: 'name', label: 'Name' },
+                                            { name: 'role', label: 'Role' },
+                                            { name: 'linkedIn', label: 'LinkedIn' },
+                                            { name: 'content', label: 'Content', type: 'textarea' },
+                                            {
+                                                name: 'image',
+                                                label: 'Image',
+                                                type: 'file',
+                                                accept: 'image/*',
+                                            },
+                                        ]}
+                                    />
+                                ) : (
+                                    <EntityCard
+                                        key={t._id}
+                                        entity={t}
+                                        lines={[
+                                            t.name,
+                                            t.role,
+                                            t.content.slice(0, 60) +
+                                                (t.content.length > 60 ? '...' : ''),
+                                        ]}
+                                        onDelete={() => handleDeleteTestimonial(t._id)}
+                                        onBeginEdit={() => setEditTestimonialId(t._id)}
+                                    />
                                 ),
                             )}
                         </div>
                     </>
                 );
+
             default:
                 return null;
         }
@@ -634,26 +1085,26 @@ function Admin() {
                             Admin Dashboard
                         </h1>
                         <p className="text-xs font-mono text-zinc-600 dark:text-zinc-400">
-                            Welcome, {user.username}. Manage portfolio content.
+                            Welcome, {currentUser.username}. Manage portfolio content.
                         </p>
                         <nav className="flex flex-wrap gap-2">
-                            {TABS.map((t) => (
+                            {ADMIN_TABS.map((tab) => (
                                 <button
-                                    key={t}
-                                    onClick={() => setActive(t)}
+                                    key={tab}
+                                    onClick={() => setActiveTab(tab)}
                                     className={`px-3 py-1.5 rounded-full text-[11px] font-mono tracking-wide ${
-                                        active === t
+                                        activeTab === tab
                                             ? 'bg-zinc-900 dark:bg-zinc-100 text-zinc-100 dark:text-zinc-900'
                                             : 'bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300'
                                     }`}
                                 >
-                                    {t}
+                                    {tab}
                                 </button>
                             ))}
                         </nav>
-                        {status && (
+                        {globalStatus && (
                             <div className="text-[11px] font-mono text-blue-700 dark:text-blue-300">
-                                {status}
+                                {globalStatus}
                             </div>
                         )}
                     </header>
@@ -665,7 +1116,7 @@ function Admin() {
                             shadow-md
                         "
                     >
-                        {tabBody()}
+                        {renderTabBody()}
                     </section>
                 </div>
             </main>
