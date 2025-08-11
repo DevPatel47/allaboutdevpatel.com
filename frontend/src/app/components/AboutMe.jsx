@@ -64,7 +64,7 @@ function AboutMe({ description }) {
                         className="
                             text-lg md:text-xl font-mono
                             text-zinc-800 dark:text-zinc-100
-                            text-center text-left leading-relaxed
+                            text-left leading-relaxed
                             w-full max-w-2xl
                             bg-zinc-50/95 dark:bg-zinc-900/90
                             rounded-xl p-6 shadow-md backdrop-blur-sm
