@@ -25,24 +25,19 @@ import Testimonial from '../../models/portfolio/testimonial.model.js';
 const getPortfolioByUsername = asyncHandler(async (req, res) => {
     const { username } = req.params;
 
-    // Validate incoming username
     if (!username?.trim()) {
         throw new ApiError(400, 'Username is required');
     }
 
-    // Find user by username, exclude sensitive fields
-    const user = await User.findOne({ username: username.trim() })
-        .select('-password -refreshToken')
-        .lean();
+    // Fetch only _id and username
+    const user = await User.findOne({ username: username.trim() }).select('_id username').lean();
 
-    // If user doesn't exist, return 404
     if (!user) {
         throw new ApiError(404, 'User not found');
     }
 
     const userId = user._id;
 
-    // Fetch all portfolio sections in parallel using Promise.all
     const [
         introduction,
         skills,
@@ -60,10 +55,9 @@ const getPortfolioByUsername = asyncHandler(async (req, res) => {
         Experience.find({ userId }).lean(),
         Certification.find({ userId }).lean(),
         SocialLink.find({ userId }).lean(),
-        Testimonial.find({}).lean(),
+        Testimonial.find({ userId }).lean(),
     ]);
 
-    // Build a complete portfolio object
     const portfolio = {
         user,
         introduction: introduction || {},
@@ -76,7 +70,6 @@ const getPortfolioByUsername = asyncHandler(async (req, res) => {
         testimonials: testimonials || [],
     };
 
-    // Send success response
     return res
         .status(200)
         .json(new ApiResponse(200, 'Portfolio fetched successfully', { portfolio }));
