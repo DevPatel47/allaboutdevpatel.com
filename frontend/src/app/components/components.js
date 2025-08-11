@@ -18,6 +18,8 @@ import AnimatedBlurDots from './AnimatedBlurDots.jsx';
 import Certifications from './Certifications.jsx';
 import Skills from './Skills.jsx';
 import Projects from './Projects.jsx';
+import ContactMe from './ContactMe.jsx';
+import Testimonials from './Testimonials.jsx';
 
 export {
     Footer,
@@ -33,5 +35,7 @@ export {
     AnimatedBlurDots,
     Certifications,
     Skills,
-    Projects
+    Projects,
+    ContactMe,
+    Testimonials,
 };

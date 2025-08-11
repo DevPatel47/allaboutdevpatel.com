@@ -48,6 +48,7 @@ import certificationRouter from './routes/portfolio/certification.routes.js';
 import socialLinkRouter from './routes/portfolio/sociallink.routes.js';
 import testimonialRouter from './routes/portfolio/testimonial.routes.js';
 import portfolioRouter from './routes/portfolio/portfolio.routes.js';
+import contactRoutes from './routes/common/contact.routes.js';
 
 // Register API routes with versioned prefixes
 app.use('/api/v1/users', userRouter);
@@ -60,6 +61,7 @@ app.use('/api/v1/portfolio/certifications', certificationRouter);
 app.use('/api/v1/portfolio/social-links', socialLinkRouter);
 app.use('/api/v1/portfolio/testimonials', testimonialRouter);
 app.use('/api/v1/portfolio', portfolioRouter);
+app.use('/api/v1/contact', contactRoutes);
 
 // Serve React dist folder for production
 const distPath = path.join(__dirname, '../frontend/dist');

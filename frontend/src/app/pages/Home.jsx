@@ -16,13 +16,12 @@ import {
     Education,
     Certifications,
     Skills,
-    Projects
+    Projects,
+    ContactMe,
+    Testimonials,
 } from '../components/components.js';
 
-import {
-    Error,
-    Loading,
-} from './pages.js';
+import { Error, Loading } from './pages.js';
 
 /**
  * Home component for the main landing page.
@@ -82,6 +81,8 @@ function Home() {
             <Skills skills={portfolio?.skills} />
             <Certifications certifications={portfolio?.certifications} />
             <Projects projects={portfolio?.projects} />
+            <Testimonials testimonials={portfolio?.testimonials} userId={portfolio?.user?._id} />
+            <ContactMe />
         </>
     );
 }
