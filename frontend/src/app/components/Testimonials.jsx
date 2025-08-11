@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { AnimatedBlurDots } from './components.js';
+import { AnimatedBlurDots, RichText } from './components.js';
 import TestimonialService from '../services/portfolio/testimonial.service.js';
 
 /**
@@ -244,7 +244,7 @@ function Testimonials({ testimonials = [], userId }) {
                                     {t.role}
                                 </p>
                                 <p className="text-sm md:text-base text-zinc-700 dark:text-zinc-300 mb-2 text-center md:text-left">
-                                    {t.content}
+                                    <RichText text={t.content} />
                                 </p>
                                 {t.linkedIn && (
                                     <a

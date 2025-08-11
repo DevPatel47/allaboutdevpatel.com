@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import doodleImg from '../../assets/education-doodle.png';
-import { AnimatedBlurDots } from './components.js';
+import { AnimatedBlurDots, RichText } from './components.js';
 
 /**
  * Education Component
@@ -168,7 +168,7 @@ function Education({ education = [] }) {
                                             transition-all duration-300
                                         "
                                     >
-                                        {edu.description}
+                                        <RichText text={edu.description} />
                                     </p>
                                 </div>
                             </div>

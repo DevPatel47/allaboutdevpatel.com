@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import boyWithLaptop from '../../assets/boy-with-laptop.png';
-import { AnimatedBlurDots } from './components.js';
+import { AnimatedBlurDots, RichText } from './components.js';
 
 /**
  * AboutMe Component
@@ -71,7 +71,7 @@ function AboutMe({ description }) {
                             transition-all duration-300
                         "
                     >
-                        {description}
+                        <RichText text={description} />
                     </p>
                     <div
                         className="

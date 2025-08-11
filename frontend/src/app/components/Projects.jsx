@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { AnimatedBlurDots } from './components.js';
+import { AnimatedBlurDots, RichText } from './components.js';
 
 /**
  * ProjectsSection Component
@@ -81,7 +81,7 @@ function Projects({ projects = [] }) {
                                     {project.title}
                                 </h4>
                                 <p className="text-sm md:text-base text-zinc-700 dark:text-zinc-300 mb-1 text-center md:text-left">
-                                    {project.description}
+                                    <RichText text={project.description} />
                                 </p>
                                 {project.techStack && project.techStack.length > 0 && (
                                     <div className="flex flex-wrap gap-2 mb-2">

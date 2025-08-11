@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import PortfolioService from '../services/portfolio/portfolio.service.js';
 import ProjectService from '../services/portfolio/project.service.js';
 
-import { BgImage } from '../components/components.js';
+import { BgImage, RichText } from '../components/components.js';
 import { Loading, Error } from './pages.js';
 
 function Projects() {
@@ -212,7 +212,7 @@ function Projects() {
                                             leading-relaxed
                                         "
                                     >
-                                        {project.description}
+                                        <RichText text={project.description} />
                                     </p>
 
                                     {project.techStack?.length > 0 && (

@@ -21,6 +21,7 @@ import Projects from './Projects.jsx';
 import ContactMe from './ContactMe.jsx';
 import Testimonials from './Testimonials.jsx';
 import WorkExperience from './WorkExperience.jsx';
+import RichText from './RichText.jsx';
 
 export {
     Footer,
@@ -40,4 +41,5 @@ export {
     ContactMe,
     Testimonials,
     WorkExperience,
+    RichText
 };
