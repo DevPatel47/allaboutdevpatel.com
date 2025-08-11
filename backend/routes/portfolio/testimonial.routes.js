@@ -7,7 +7,7 @@ import {
     deleteTestimonial,
 } from '../../controllers/portfolio/testimonial.controller.js';
 import { verifyJWT } from '../../middlewares/auth.middleware.js';
-import { verifyAdminStatus } from '../../middlewares/checkAdminStatus.middleware.js';
+// import { verifyAdminStatus } from '../../middlewares/checkAdminStatus.middleware.js'; // ...existing code...
 import { upload } from '../../middlewares/multer.middleware.js';
 import { verifyObjectId } from '../../middlewares/checkObjectId.middleware.js';
 
@@ -29,7 +29,7 @@ const router = Router();
  * @middleware verifyJWT, upload.single (image), verifyObjectId
  * @returns {Object} 201 - Created testimonial entry
  */
-router.post('/:userId', verifyJWT, upload.single('image'), verifyObjectId, createTestimonial);
+router.post('/:userId', upload.single('image'), verifyObjectId, createTestimonial);
 
 /**
  * Get all testimonial entries for a user

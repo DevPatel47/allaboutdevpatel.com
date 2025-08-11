@@ -25,13 +25,6 @@ const createTestimonial = asyncHandler(async (req, res) => {
             .json(new ApiError(400, 'User ID, name, role, and content are required'));
     }
 
-    // Only allow the user themselves to create
-    if (userId.toString() !== req.user._id.toString()) {
-        return res
-            .status(403)
-            .json(new ApiError(403, 'You are not authorized to create this testimonial'));
-    }
-
     // Check if user exists
     const user = await User.findById(userId);
     if (!user) {
@@ -59,13 +52,11 @@ const createTestimonial = asyncHandler(async (req, res) => {
         return res.status(500).json(new ApiError(500, 'Failed to create testimonial'));
     }
 
-    return res
-        .status(201)
-        .json(
-            new ApiResponse(201, 'Testimonial created successfully', {
-                testimonial: newTestimonial,
-            }),
-        );
+    return res.status(201).json(
+        new ApiResponse(201, 'Testimonial created successfully', {
+            testimonial: newTestimonial,
+        }),
+    );
 });
 
 /**
@@ -183,13 +174,11 @@ const updateTestimonial = asyncHandler(async (req, res) => {
         await deleteFromCloudinary(oldImageUrl);
     }
 
-    return res
-        .status(200)
-        .json(
-            new ApiResponse(200, 'Testimonial updated successfully', {
-                testimonial: updatedTestimonial,
-            }),
-        );
+    return res.status(200).json(
+        new ApiResponse(200, 'Testimonial updated successfully', {
+            testimonial: updatedTestimonial,
+        }),
+    );
 });
 
 /**
@@ -231,13 +220,11 @@ const deleteTestimonial = asyncHandler(async (req, res) => {
         await deleteFromCloudinary(testimonial.image);
     }
 
-    return res
-        .status(200)
-        .json(
-            new ApiResponse(200, 'Testimonial deleted successfully', {
-                testimonial: deletedTestimonial,
-            }),
-        );
+    return res.status(200).json(
+        new ApiResponse(200, 'Testimonial deleted successfully', {
+            testimonial: deletedTestimonial,
+        }),
+    );
 });
 
 // Export all controller functions
