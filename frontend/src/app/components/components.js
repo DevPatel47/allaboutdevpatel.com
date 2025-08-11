@@ -20,6 +20,7 @@ import Skills from './Skills.jsx';
 import Projects from './Projects.jsx';
 import ContactMe from './ContactMe.jsx';
 import Testimonials from './Testimonials.jsx';
+import WorkExperience from './WorkExperience.jsx';
 
 export {
     Footer,
@@ -38,4 +39,5 @@ export {
     Projects,
     ContactMe,
     Testimonials,
+    WorkExperience,
 };

@@ -19,6 +19,7 @@ import {
     Projects,
     ContactMe,
     Testimonials,
+    WorkExperience,
 } from '../components/components.js';
 
 import { Error, Loading } from './pages.js';
@@ -78,6 +79,7 @@ function Home() {
             />
             <AboutMe description={portfolio?.introduction?.description} />
             <Education education={portfolio?.education} />
+            <WorkExperience experience={portfolio?.experience} />
             <Skills skills={portfolio?.skills} />
             <Certifications certifications={portfolio?.certifications} />
             <Projects projects={portfolio?.projects} />
