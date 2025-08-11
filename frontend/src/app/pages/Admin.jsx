@@ -7,7 +7,7 @@ import ExperienceService from '../services/portfolio/experience.service.js';
 import SkillService from '../services/portfolio/skill.service.js';
 import ProjectService from '../services/portfolio/project.service.js';
 import CertificationService from '../services/portfolio/certification.service.js';
-import SocialLinkService from '../services/portfolio/sociallink.service.js';
+import SocialLinkService from '../services/portfolio/socialLink.service.js';
 import TestimonialService from '../services/portfolio/testimonial.service.js';
 import { BgImage } from '../components/components.js';
 import { Loading } from './pages.js';
