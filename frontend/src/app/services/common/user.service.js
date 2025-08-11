@@ -156,15 +156,19 @@ UserService.prototype.deleteCurrentUser = async function () {
  * @returns {Promise<User>} User model instance.
  * @throws {Error} If login fails.
  */
-UserService.prototype.login = async function (email, password) {
-    // POST /api/v1/users/login
+UserService.prototype.login = async function (identifier, password) {
+    // Supports username OR email based on presence of '@'
+    const payload = identifier.includes('@')
+        ? { email: identifier.trim(), password }
+        : { username: identifier.trim(), password };
+
     const response = await fetch(`${this.host}/login`, {
         method: 'POST',
         credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify(payload),
     });
     const data = await response.json();
     if (data?.data?.user) {
@@ -213,10 +217,10 @@ UserService.prototype.getCurrentUser = async function () {
         credentials: 'include',
     });
     const data = await response.json();
-    if (data?.data?.user) {
+    if (response.ok && data?.data?.user) {
         return new User(data.data.user);
     }
-    throw new Error(data.message || 'No user found');
+    throw new Error(data.message || 'Not authenticated');
 };
 
 /**
