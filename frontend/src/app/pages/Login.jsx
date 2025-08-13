@@ -69,9 +69,7 @@ function Login() {
                         </h1>
                         <form onSubmit={onSubmit} className="flex flex-col gap-5 relative z-10">
                             <div className="flex flex-col gap-2">
-                                <label className="text-xs font-mono text-zinc-600 dark:text-zinc-400">
-                                    Username or Email
-                                </label>
+                                <label className="text-meta">Username or Email</label>
                                 <input
                                     autoComplete="username"
                                     value={identifier}
@@ -89,9 +87,7 @@ function Login() {
                                 />
                             </div>
                             <div className="flex flex-col gap-2">
-                                <label className="text-xs font-mono text-zinc-600 dark:text-zinc-400">
-                                    Password
-                                </label>
+                                <label className="text-meta">Password</label>
                                 <input
                                     type="password"
                                     autoComplete="current-password"
@@ -111,12 +107,12 @@ function Login() {
                             </div>
 
                             {status.error && (
-                                <p className="text-xs font-mono text-red-600 dark:text-red-400">
+                                <p className="text-meta text-red-600 dark:text-red-400">
                                     {status.error}
                                 </p>
                             )}
                             {status.ok && !status.error && (
-                                <p className="text-xs font-mono text-green-700 dark:text-green-400">
+                                <p className="text-meta text-green-700 dark:text-green-400">
                                     Login successful. Redirecting...
                                 </p>
                             )}
@@ -125,7 +121,7 @@ function Login() {
                                 type="submit"
                                 disabled={!canSubmit}
                                 className="
-                                    h-11 rounded-xl px-6 font-semibold text-sm
+                                    h-11 rounded-xl px-6 font-semibold text-sm md:text-base
                                     bg-zinc-900 dark:bg-zinc-50
                                     text-zinc-50 dark:text-zinc-900
                                     disabled:opacity-50 disabled:cursor-not-allowed

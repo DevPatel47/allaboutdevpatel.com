@@ -12,6 +12,15 @@ import { AnimatedBlurDots } from './components.js';
 function Skills({ skills = [] }) {
     if (!skills.length) return null;
 
+    const levelColorMap = {
+        Beginner:
+            'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-200 border border-amber-200 dark:border-amber-700',
+        Intermediate:
+            'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-200 border border-blue-200 dark:border-blue-700',
+        Advanced:
+            'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-200 border border-emerald-200 dark:border-emerald-700',
+    };
+
     return (
         <section
             className="
@@ -32,14 +41,7 @@ function Skills({ skills = [] }) {
                     transition-all duration-300
                 "
             >
-                <h3
-                    className="
-                        text-4xl md:text-5xl font-extrabold font-poiret mb-6
-                        text-zinc-900 dark:text-zinc-50
-                        text-center tracking-tight drop-shadow
-                        transition-all duration-300
-                    "
-                >
+                <h3 className="heading-section mb-6 text-zinc-900 dark:text-zinc-50 text-center tracking-tight drop-shadow transition-all duration-300">
                     🛠️ Skills
                 </h3>
                 <div className="w-full flex flex-col gap-6">
@@ -54,43 +56,35 @@ function Skills({ skills = [] }) {
                                 relative z-10
                             "
                         >
-                            <span
-                                className="
-                                    font-bold text-lg md:text-2xl text-blue-900 dark:text-blue-200 mb-1 text-center md:text-left transition-all duration-300
-                                "
-                            >
+                            <span className="heading-card mb-1 text-center md:text-left transition-all duration-300">
                                 {category.category}
                             </span>
                             <div className="flex flex-wrap gap-3 justify-center w-full">
-                                {category.skills.map((skill) => (
-                                    <span
-                                        key={skill._id}
-                                        className={`
-                                            px-3 py-1 rounded-lg font-mono text-sm md:text-base
-                                            bg-indigo-100 dark:bg-indigo-900
-                                            text-indigo-900 dark:text-indigo-100
-                                            border border-indigo-200 dark:border-indigo-800
-                                            transition-all duration-300
-                                            flex items-center gap-2
-                                        `}
-                                    >
-                                        {skill.name}
+                                {category.skills.map((skill) => {
+                                    const levelClasses =
+                                        levelColorMap[skill.level] ||
+                                        'bg-zinc-200 dark:bg-zinc-700 text-zinc-800 dark:text-zinc-100 border border-zinc-300 dark:border-zinc-600';
+                                    return (
                                         <span
-                                            className={`
-                                                text-xs px-2 py-0.5 rounded
-                                                ${
-                                                    skill.level === 'Beginner'
-                                                        ? 'bg-pink-200 dark:bg-pink-800 text-pink-800 dark:text-pink-200'
-                                                        : skill.level === 'Intermediate'
-                                                          ? 'bg-orange-200 dark:bg-orange-800 text-orange-800 dark:text-orange-200'
-                                                          : 'bg-cyan-200 dark:bg-cyan-800 text-cyan-800 dark:text-cyan-200'
-                                                }
-                                            `}
+                                            key={skill._id}
+                                            className="
+                                                px-3 py-1 rounded-lg font-mono text-sm md:text-base
+                                                bg-zinc-100 dark:bg-zinc-800
+                                                text-zinc-800 dark:text-zinc-100
+                                                border border-zinc-200 dark:border-zinc-700
+                                                transition-all duration-300 flex items-center gap-2
+                                                hover:bg-zinc-200 dark:hover:bg-zinc-700
+                                            "
                                         >
-                                            {skill.level}
+                                            {skill.name}
+                                            <span
+                                                className={`text-xs font-semibold tracking-tight px-2 py-0.5 rounded-md transition-colors duration-300 ${levelClasses}`}
+                                            >
+                                                {skill.level}
+                                            </span>
                                         </span>
-                                    </span>
-                                ))}
+                                    );
+                                })}
                             </div>
                         </div>
                     ))}

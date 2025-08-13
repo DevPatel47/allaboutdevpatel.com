@@ -49,28 +49,10 @@ function AboutMe({ description }) {
                         transition-all duration-300
                     "
                 >
-                    <h3
-                        className="
-                            hidden lg:block
-                            text-4xl md:text-5xl font-extrabold font-poiret mb-6
-                            text-zinc-900 dark:text-zinc-50
-                            text-center lg:text-left tracking-tight drop-shadow
-                            transition-all duration-300
-                        "
-                    >
+                    <h3 className="hidden lg:block heading-section mb-6 text-zinc-900 dark:text-zinc-50 text-center lg:text-left drop-shadow transition-all duration-300">
                         👨‍💻 About Me
                     </h3>
-                    <div
-                        className="
-                            text-base md:text-lg
-                            text-zinc-700 dark:text-zinc-300
-                            leading-relaxed text-left
-                            w-full max-w-2xl
-                            bg-zinc-50/95 dark:bg-zinc-900/90
-                            rounded-xl p-6 shadow-md backdrop-blur-sm
-                            transition-all duration-300
-                        "
-                    >
+                    <div className="text-body w-full max-w-2xl bg-zinc-50/95 dark:bg-zinc-900/90 rounded-xl p-6 shadow-md backdrop-blur-sm transition-all duration-300">
                         <RichText text={description} as="div" />
                     </div>
                     <div
@@ -140,15 +122,7 @@ function AboutMe({ description }) {
                         relative z-0
                     "
                 >
-                    <h3
-                        className="
-                            lg:hidden
-                            text-4xl md:text-5xl font-extrabold font-poiret mb-6
-                            text-zinc-900 dark:text-zinc-50
-                            text-center lg:text-left tracking-tight drop-shadow
-                            transition-all duration-300
-                        "
-                    >
+                    <h3 className="lg:hidden heading-section mb-6 text-zinc-900 dark:text-zinc-50 text-center drop-shadow transition-all duration-300">
                         👨‍💻 About Me
                     </h3>
                     <div className="relative group transition-all duration-300">

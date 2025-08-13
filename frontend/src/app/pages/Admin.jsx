@@ -35,7 +35,7 @@ const ADMIN_TABS = [
 
 function Field({ label, children }) {
     return (
-        <label className="flex flex-col gap-1 text-xs font-mono text-zinc-600 dark:text-zinc-400">
+        <label className="flex flex-col gap-1 text-meta">
             <span>{label}</span>
             {children}
         </label>
@@ -463,14 +463,14 @@ function Admin() {
                 {onBeginEdit && (
                     <button
                         onClick={onBeginEdit}
-                        className="text-[10px] px-2 py-1 rounded bg-amber-500 text-white"
+                        className="text-badge px-2 py-1 rounded bg-amber-500 text-white"
                     >
                         Edit
                     </button>
                 )}
                 <button
                     onClick={onDelete}
-                    className="text-[10px] px-2 py-1 rounded bg-red-600 text-white"
+                    className="text-badge px-2 py-1 rounded bg-red-600 text-white"
                 >
                     Delete
                 </button>
@@ -1081,10 +1081,10 @@ function Admin() {
                             shadow-xl p-6 flex flex-col gap-4
                         "
                     >
-                        <h1 className="text-3xl md:text-4xl font-extrabold font-poiret tracking-tight text-zinc-900 dark:text-zinc-50">
+                        <h1 className="heading-section text-zinc-900 dark:text-zinc-50">
                             Admin Dashboard
                         </h1>
-                        <p className="text-xs font-mono text-zinc-600 dark:text-zinc-400">
+                        <p className="text-meta">
                             Welcome, {currentUser.username}. Manage portfolio content.
                         </p>
                         <nav className="flex flex-wrap gap-2">
@@ -1103,7 +1103,7 @@ function Admin() {
                             ))}
                         </nav>
                         {globalStatus && (
-                            <div className="text-[11px] font-mono text-blue-700 dark:text-blue-300">
+                            <div className="text-meta text-blue-700 dark:text-blue-300">
                                 {globalStatus}
                             </div>
                         )}

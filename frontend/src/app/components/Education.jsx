@@ -44,15 +44,7 @@ function Education({ education = [] }) {
                         relative z-0
                     "
                 >
-                    <h3
-                        className="
-                            lg:hidden
-                            text-4xl md:text-5xl font-extrabold font-poiret mb-6
-                            text-zinc-900 dark:text-zinc-50
-                            text-center md:text-left tracking-tight drop-shadow
-                            transition-all duration-300
-                        "
-                    >
+                    <h3 className="lg:hidden heading-section mb-6 text-zinc-900 dark:text-zinc-50 text-center drop-shadow transition-all duration-300">
                         🎓 Education
                     </h3>
                     <div className="relative group transition-all duration-300 ">
@@ -80,15 +72,7 @@ function Education({ education = [] }) {
                         transition-all duration-300
                     "
                 >
-                    <h3
-                        className="
-                            hidden lg:block
-                            text-4xl md:text-5xl font-extrabold font-poiret mb-6
-                            text-zinc-900 dark:text-zinc-50
-                            text-center md:text-left tracking-tight drop-shadow
-                            transition-all duration-300
-                        "
-                    >
+                    <h3 className="hidden lg:block heading-section mb-6 text-zinc-900 dark:text-zinc-50 text-center md:text-left drop-shadow transition-all duration-300">
                         🎓 Education
                     </h3>
                     <div
@@ -124,34 +108,18 @@ function Education({ education = [] }) {
                                     />
                                 )}
                                 <div className="flex-1 flex flex-col items-center md:items-start">
-                                    <h4
-                                        className="
-                                            font-bold text-lg md:text-2xl text-blue-900 dark:text-blue-200 mb-1 text-center md:text-left
-                                            transition-all duration-300
-                                        "
-                                    >
+                                    <h4 className="heading-card mb-1 text-center md:text-left transition-all duration-300">
                                         {edu.degree}
                                     </h4>
-                                    <p
-                                        className="
-                                            text-sm md:text-base text-zinc-800 dark:text-zinc-100
-                                            mb-2 font-semibold text-center md:text-left
-                                            transition-all duration-300
-                                        "
-                                    >
+                                    <p className="text-body font-semibold mb-2 text-center md:text-left">
                                         {edu.institution}
                                         {edu.fieldOfStudy && (
-                                            <span className="ml-2 text-xs text-zinc-500 dark:text-zinc-400 font-mono">
+                                            <span className="ml-2 text-meta">
                                                 {edu.fieldOfStudy}
                                             </span>
                                         )}
                                     </p>
-                                    <p
-                                        className="
-                                            text-xs text-zinc-600 dark:text-zinc-400 font-mono mb-2 text-center md:text-left
-                                            transition-all duration-300
-                                        "
-                                    >
+                                    <p className="text-meta mb-2 text-center md:text-left">
                                         {new Date(edu.startDate).toLocaleDateString()} -{' '}
                                         {new Date(edu.endDate).toLocaleDateString()}
                                         {edu.grade && (
@@ -162,7 +130,7 @@ function Education({ education = [] }) {
                                             </>
                                         )}
                                     </p>
-                                    <div className="text-sm md:text-base text-zinc-600 dark:text-zinc-400">
+                                    <div className="text-body">
                                         <RichText text={edu.description} as="div" />
                                     </div>
                                 </div>

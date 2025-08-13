@@ -31,14 +31,7 @@ function Projects({ projects = [] }) {
                 "
             >
                 {/* Heading */}
-                <h3
-                    className="
-                        text-4xl md:text-5xl font-extrabold font-poiret mb-6
-                        text-zinc-900 dark:text-zinc-50
-                        text-center lg:text-left tracking-tight drop-shadow
-                        transition-all duration-300
-                    "
-                >
+                <h3 className="heading-section mb-6 text-zinc-900 dark:text-zinc-50 text-center lg:text-left tracking-tight drop-shadow transition-all duration-300">
                     🚀 Projects
                 </h3>
                 <div className="w-full max-w-2xl lg:max-w-5xl flex flex-col items-center gap-6">
@@ -77,18 +70,21 @@ function Projects({ projects = [] }) {
                                 </a>
                             )}
                             <div className="flex-1 flex flex-col items-center md:items-start">
-                                <h4 className="font-bold text-lg md:text-2xl text-blue-900 dark:text-blue-200 mb-1 text-center md:text-left transition-all duration-300">
+                                <h4 className="heading-card mb-1 text-center md:text-left transition-all duration-300">
                                     {project.title}
                                 </h4>
-                                <div className="text-sm md:text-base text-zinc-700 dark:text-zinc-300 mb-1 text-center md:text-left">
+                                <div className="text-body mb-1 text-center md:text-left">
                                     <RichText text={project.description} as="div" />
                                 </div>
+                                <p className="text-meta mb-2 text-center md:text-left">
+                                    {/* keep meta if needed */}
+                                </p>
                                 {project.techStack && project.techStack.length > 0 && (
                                     <div className="flex flex-wrap gap-2 mb-2">
                                         {project.techStack.map((tech, i) => (
                                             <span
                                                 key={i}
-                                                className="text-xs font-mono bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 px-2 py-1 rounded"
+                                                className="text-badge bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 px-2 py-1 rounded"
                                             >
                                                 {tech}
                                             </span>
@@ -100,7 +96,7 @@ function Projects({ projects = [] }) {
                                         {project.tags.map((tag, i) => (
                                             <span
                                                 key={i}
-                                                className="text-xs font-mono bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 px-2 py-1 rounded"
+                                                className="text-badge bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 px-2 py-1 rounded"
                                             >
                                                 #{tag}
                                             </span>
@@ -113,7 +109,7 @@ function Projects({ projects = [] }) {
                                             href={project.liveLink}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="text-xs text-green-700 dark:text-green-300 underline"
+                                            className="link-green"
                                         >
                                             Live Demo
                                         </a>
@@ -123,7 +119,7 @@ function Projects({ projects = [] }) {
                                             href={project.repoLink}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="text-xs text-blue-700 dark:text-blue-300 underline"
+                                            className="link-blue"
                                         >
                                             Source Code
                                         </a>

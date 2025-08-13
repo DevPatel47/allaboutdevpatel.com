@@ -51,14 +51,7 @@ function ContactMe() {
                     transition-all duration-300
                 "
             >
-                <h3
-                    className="
-                        text-4xl md:text-5xl font-extrabold font-poiret mb-6
-                        text-zinc-900 dark:text-zinc-50
-                        text-center tracking-tight drop-shadow
-                        transition-all duration-300
-                    "
-                >
+                <h3 className="heading-section mb-6 text-zinc-900 dark:text-zinc-50 text-center tracking-tight drop-shadow transition-all duration-300">
                     ✉️ Contact Me
                 </h3>
                 <form
@@ -73,10 +66,7 @@ function ContactMe() {
                     noValidate
                 >
                     <div className="flex flex-col gap-2">
-                        <label
-                            htmlFor="name"
-                            className="text-xs font-mono text-zinc-600 dark:text-zinc-400"
-                        >
+                        <label htmlFor="name" className="text-meta">
                             Name
                         </label>
                         <input
@@ -98,10 +88,7 @@ function ContactMe() {
                         />
                     </div>
                     <div className="flex flex-col gap-2">
-                        <label
-                            htmlFor="email"
-                            className="text-xs font-mono text-zinc-600 dark:text-zinc-400"
-                        >
+                        <label htmlFor="email" className="text-meta">
                             Email
                         </label>
                         <input
@@ -124,10 +111,7 @@ function ContactMe() {
                         />
                     </div>
                     <div className="flex flex-col gap-2">
-                        <label
-                            htmlFor="subject"
-                            className="text-xs font-mono text-zinc-600 dark:text-zinc-400"
-                        >
+                        <label htmlFor="subject" className="text-meta">
                             Subject
                         </label>
                         <input
@@ -149,10 +133,7 @@ function ContactMe() {
                         />
                     </div>
                     <div className="flex flex-col gap-2">
-                        <label
-                            htmlFor="message"
-                            className="text-xs font-mono text-zinc-600 dark:text-zinc-400"
-                        >
+                        <label htmlFor="message" className="text-meta">
                             Message
                         </label>
                         <textarea
@@ -176,7 +157,7 @@ function ContactMe() {
                     </div>
                     {status.msg && (
                         <p
-                            className={`text-xs font-mono ${
+                            className={`text-meta ${
                                 status.ok
                                     ? 'text-green-700 dark:text-green-400'
                                     : 'text-red-600 dark:text-red-400'
@@ -190,16 +171,13 @@ function ContactMe() {
                             type="submit"
                             disabled={!canSubmit || status.sending}
                             className="
-                                relative h-11 px-6 py-2.5
-                                overflow-hidden rounded-lg
+                                px-5 py-3 rounded-xl
                                 text-sm md:text-base font-semibold
                                 bg-zinc-900 dark:bg-zinc-50
                                 text-zinc-50 dark:text-zinc-900
-                                transition-all duration-300
-                                disabled:opacity-50 disabled:cursor-not-allowed
                                 hover:bg-zinc-800 dark:hover:bg-zinc-200
-                                ring-0 hover:ring-2 hover:ring-zinc-800 dark:hover:ring-zinc-200
-                                hover:ring-offset-2 dark:hover:ring-offset-zinc-950
+                                transition-colors
+                                disabled:opacity-50 disabled:cursor-not-allowed
                             "
                             aria-busy={status.sending}
                         >

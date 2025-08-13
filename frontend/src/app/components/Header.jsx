@@ -80,7 +80,7 @@ function Header() {
                         end
                         className={({ isActive }) =>
                             (isActive ? '' : 'text-zinc-500 dark:text-zinc-400') +
-                            ' text-lg font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300'
+                            ' text-sm md:text-base font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300'
                         }
                     >
                         Home
@@ -90,7 +90,7 @@ function Header() {
                         end
                         className={({ isActive }) =>
                             (isActive ? '' : 'text-zinc-500 dark:text-zinc-400') +
-                            ' text-lg font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300'
+                            ' text-sm md:text-base font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300'
                         }
                     >
                         Projects
@@ -100,7 +100,7 @@ function Header() {
                         end
                         className={({ isActive }) =>
                             (isActive ? '' : 'text-zinc-500 dark:text-zinc-400') +
-                            ' text-lg font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300'
+                            ' text-sm md:text-base font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300'
                         }
                     >
                         Github
@@ -110,14 +110,14 @@ function Header() {
                         end
                         className={({ isActive }) =>
                             (isActive ? '' : 'text-zinc-500 dark:text-zinc-400') +
-                            ' text-lg font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300'
+                            ' text-sm md:text-base font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300'
                         }
                     >
                         Admin
                     </NavLink>
                     <button
                         onClick={onChangeThemeBtn}
-                        className="w-24 flex flex-row justify-around items-center text-lg font-semibold text-zinc-500 dark:text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300"
+                        className="w-24 flex flex-row justify-around items-center text-sm font-semibold text-zinc-500 dark:text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300"
                         aria-label="Toggle theme"
                         type="button"
                     >
@@ -152,7 +152,7 @@ function Header() {
                             end
                             className={({ isActive }) =>
                                 (isActive ? '' : 'text-zinc-500 dark:text-zinc-400') +
-                                ' text-lg font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300'
+                                ' text-sm md:text-base font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300'
                             }
                             role="menuitem"
                             onClick={() => setMenuOpen(false)}
@@ -164,7 +164,7 @@ function Header() {
                             end
                             className={({ isActive }) =>
                                 (isActive ? '' : 'text-zinc-500 dark:text-zinc-400') +
-                                ' text-lg font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300'
+                                ' text-sm md:text-base font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300'
                             }
                             role="menuitem"
                             onClick={() => setMenuOpen(false)}
@@ -176,7 +176,7 @@ function Header() {
                             end
                             className={({ isActive }) =>
                                 (isActive ? '' : 'text-zinc-500 dark:text-zinc-400') +
-                                ' text-lg font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300'
+                                ' text-sm md:text-base font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300'
                             }
                             role="menuitem"
                             onClick={() => setMenuOpen(false)}
@@ -188,7 +188,7 @@ function Header() {
                             end
                             className={({ isActive }) =>
                                 (isActive ? '' : 'text-zinc-500 dark:text-zinc-400') +
-                                ' text-lg font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300'
+                                ' text-sm md:text-base font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300'
                             }
                             role="menuitem"
                             onClick={() => setMenuOpen(false)}
@@ -200,11 +200,11 @@ function Header() {
                                 onChangeThemeBtn();
                                 setMenuOpen(false);
                             }}
-                            className="text-lg font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300"
+                            className="text-sm font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300"
                             aria-label="Toggle theme"
                             type="button"
                         >
-                            Theme{' '}
+                            <span className="text-sm">Theme</span>{' '}
                             {themeMode === 'dark' ? (
                                 <FontAwesomeIcon
                                     icon={faSun}

@@ -78,14 +78,7 @@ function Testimonials({ testimonials = [], userId }) {
                     transition-all duration-300
                 "
             >
-                <h3
-                    className="
-                        text-4xl md:text-5xl font-extrabold font-poiret mb-6
-                        text-zinc-900 dark:text-zinc-50
-                        text-center tracking-tight drop-shadow
-                        transition-all duration-300
-                    "
-                >
+                <h3 className="heading-section mb-6 text-zinc-900 dark:text-zinc-50 text-center tracking-tight drop-shadow transition-all duration-300">
                     💬 Testimonials
                 </h3>
 
@@ -237,21 +230,19 @@ function Testimonials({ testimonials = [], userId }) {
                                 />
                             )}
                             <div className="flex-1 flex flex-col items-center md:items-start">
-                                <h4 className="font-bold text-lg md:text-2xl text-blue-900 dark:text-blue-200 mb-1 text-center md:text-left transition-all duration-300">
+                                <h4 className="heading-card mb-1 text-center md:text-left transition-all duration-300">
                                     {t.name}
                                 </h4>
-                                <p className="text-xs font-mono text-zinc-500 dark:text-zinc-400 mb-2 text-center md:text-left">
-                                    {t.role}
-                                </p>
-                                <div className="text-sm md:text-base text-zinc-700 dark:text-zinc-300 mb-2 text-center md:text-left">
-                                    <RichText text={t.content} as="div" />
+                                <p className="text-meta mb-2 text-center md:text-left">{t.role}</p>
+                                <div className="text-body mb-2 text-center md:text-left">
+                                    <RichText text={t.content} />
                                 </div>
                                 {t.linkedIn && (
                                     <a
                                         href={t.linkedIn}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-xs text-blue-700 dark:text-blue-300 underline break-all"
+                                        className="link-blue break-all"
                                     >
                                         LinkedIn
                                     </a>

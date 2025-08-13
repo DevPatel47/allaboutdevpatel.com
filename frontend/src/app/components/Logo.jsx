@@ -20,7 +20,7 @@ function Logo() {
             className="
                 w-36 h-16
                 relative flex items-center justify-center
-                m-8 shrink-0
+                m-10 shrink-0
             "
             to="/"
             aria-label="Homepage"
@@ -29,7 +29,7 @@ function Logo() {
                 className="
                     absolute
                     text-6xl font-bold
-                    text-zinc-900/30 dark:text-zinc-50/30 mb-3
+                    text-zinc-900/30 dark:text-zinc-50/30 mb-1
                     select-none
                 "
                 aria-hidden="true"
@@ -39,7 +39,7 @@ function Logo() {
             <h2
                 className="
                     absolute
-                    text-md font-black tracking-widest
+                    text-sm md:text-base font-black tracking-widest
                     text-zinc-900 dark:text-zinc-50
                     select-none
                 "

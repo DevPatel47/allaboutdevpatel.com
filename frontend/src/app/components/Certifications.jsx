@@ -34,14 +34,7 @@ function Certifications({ certifications = [] }) {
                 "
             >
                 {/* Heading */}
-                <h3
-                    className="
-                        text-4xl md:text-5xl font-extrabold font-poiret mb-6
-                        text-zinc-900 dark:text-zinc-50
-                        text-center lg:text-left tracking-tight drop-shadow
-                        transition-all duration-300
-                    "
-                >
+                <h3 className="heading-section mb-6 text-zinc-900 dark:text-zinc-50 text-center lg:text-left tracking-tight drop-shadow transition-all duration-300">
                     🏅 My Certifications
                 </h3>
                 <div className="w-full max-w-2xl lg:max-w-5xl flex flex-col items-center gap-6">
@@ -72,13 +65,13 @@ function Certifications({ certifications = [] }) {
                                 />
                             )}
                             <div className="flex-1 flex flex-col items-center md:items-start">
-                                <h4 className="font-bold text-lg md:text-2xl text-blue-900 dark:text-blue-200 mb-1 text-center md:text-left transition-all duration-300">
+                                <h4 className="heading-card mb-1 text-center md:text-left transition-all duration-300">
                                     {cert.title}
                                 </h4>
-                                <p className="text-sm md:text-base text-zinc-700 dark:text-zinc-300 mb-1 text-center md:text-left">
+                                <p className="text-body mb-1 text-center md:text-left">
                                     {cert.provider}
                                 </p>
-                                <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-2 font-mono text-center md:text-left">
+                                <p className="text-meta mb-2 text-center md:text-left">
                                     {cert.issueDate &&
                                         new Date(cert.issueDate).toLocaleDateString(undefined, {
                                             year: 'numeric',
@@ -91,7 +84,7 @@ function Certifications({ certifications = [] }) {
                                         href={cert.credentialUrl}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-xs text-blue-700 dark:text-blue-300 underline break-all"
+                                        className="link-blue break-all"
                                     >
                                         View Credential
                                     </a>

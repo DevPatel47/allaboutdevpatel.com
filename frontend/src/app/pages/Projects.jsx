@@ -88,25 +88,8 @@ function Projects() {
                 <div className="relative z-0 w-full max-w-6xl flex flex-col gap-12">
                     {/* Hero */}
                     <header className="flex flex-col items-center gap-6">
-                        <h1
-                            className="
-                                text-4xl sm:text-5xl md:text-6xl font-extrabold font-poiret
-                                tracking-tight text-zinc-900 dark:text-zinc-50
-                                text-center drop-shadow-2xl
-                                transition-all duration-300
-                            "
-                        >
-                            All Projects
-                        </h1>
-                        <p
-                            className="
-                                max-w-3xl text-center text-sm md:text-base font-mono
-                                text-zinc-600 dark:text-zinc-400
-                                bg-zinc-100/70 dark:bg-zinc-900/70
-                                px-4 py-3 rounded-2xl shadow-sm
-                                transition-all duration-300
-                            "
-                        >
+                        <h1 className="heading-hero text-center drop-shadow-2xl">All Projects</h1>
+                        <p className="text-body max-w-3xl text-center bg-zinc-100/70 dark:bg-zinc-900/70 px-4 py-3 rounded-2xl shadow-sm">
                             A complete list of my work. Filter, explore, and dive into what I have
                             been building.
                         </p>
@@ -149,7 +132,7 @@ function Projects() {
                                     ))}
                                 </select>
                             </div>
-                            <div className="text-[11px] font-mono text-zinc-600 dark:text-zinc-400 text-center md:text-right">
+                            <div className="text-meta text-center md:text-right">
                                 {filteredProjects.length} / {projectList.length} shown
                             </div>
                         </div>
@@ -197,21 +180,10 @@ function Projects() {
                                             />
                                         </div>
                                     )}
-                                    <h2
-                                        className="
-                                            text-xl font-bold text-blue-900 dark:text-blue-200
-                                            tracking-tight leading-snug
-                                            transition-all duration-300
-                                        "
-                                    >
+                                    <h2 className="heading-card tracking-tight leading-snug transition-all duration-300">
                                         {project.title}
                                     </h2>
-                                    <div
-                                        className="
-                                            text-xs font-mono text-zinc-600 dark:text-zinc-400
-                                            leading-relaxed
-                                        "
-                                    >
+                                    <div className="text-body">
                                         <RichText text={project.description} as="div" />
                                     </div>
 
@@ -220,12 +192,7 @@ function Projects() {
                                             {project.techStack.map((tech, i) => (
                                                 <span
                                                     key={i}
-                                                    className="
-                                                        text-[10px] font-mono
-                                                        bg-zinc-200 dark:bg-zinc-800
-                                                        text-zinc-700 dark:text-zinc-200
-                                                        px-2 py-1 rounded
-                                                    "
+                                                    className="text-badge bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 px-2 py-1 rounded"
                                                 >
                                                     {tech}
                                                 </span>
@@ -238,12 +205,7 @@ function Projects() {
                                             {project.tags.map((tag, i) => (
                                                 <span
                                                     key={i}
-                                                    className="
-                                                        text-[10px] font-mono
-                                                        bg-blue-100 dark:bg-blue-900
-                                                        text-blue-700 dark:text-blue-200
-                                                        px-2 py-1 rounded
-                                                    "
+                                                    className="text-badge bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 px-2 py-1 rounded"
                                                 >
                                                     #{tag}
                                                 </span>
@@ -257,11 +219,7 @@ function Projects() {
                                                 href={project.liveLink}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="
-                                                    text-xs font-semibold underline
-                                                    text-green-700 dark:text-green-300
-                                                    hover:opacity-80
-                                                "
+                                                className="link-green"
                                             >
                                                 Live
                                             </a>
@@ -271,11 +229,7 @@ function Projects() {
                                                 href={project.repoLink}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="
-                                                    text-xs font-semibold underline
-                                                    text-blue-700 dark:text-blue-300
-                                                    hover:opacity-80
-                                                "
+                                                className="link-blue"
                                             >
                                                 Code
                                             </a>
@@ -285,11 +239,7 @@ function Projects() {
                                                 href={project.video}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="
-                                                    text-xs font-semibold underline
-                                                    text-purple-700 dark:text-purple-300
-                                                    hover:opacity-80
-                                                "
+                                                className="link-purple"
                                             >
                                                 Video
                                             </a>

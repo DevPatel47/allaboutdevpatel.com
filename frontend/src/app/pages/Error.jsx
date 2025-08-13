@@ -23,17 +23,7 @@ function Error({ errorMessage }) {
         <>
             <BgImage />
             <div className="absolute flex justify-center items-center w-full h-screen z-20 p-20">
-                <h1
-                    className="
-                        text-4xl md:text-6xl lg:text-7xl
-                        font-extrabold font-poiret
-                        text-zinc-700/75 dark:text-zinc-200/75
-                        relative z-10
-                        drop-shadow-2xl text-center
-                    "
-                    role="alert"
-                    aria-live="assertive"
-                >
+                <h1 className="heading-hero text-zinc-700/75 dark:text-zinc-200/75 drop-shadow-2xl text-center">
                     {errorMessage}
                 </h1>
             </div>

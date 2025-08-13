@@ -57,34 +57,17 @@ function Introduction({ introduction, socialLinks }) {
                             'Welcome to my portfolio.',
                         ]}
                         className="
-                            w-full
-                            text-3xl sm:text-4xl md:text-6xl lg:text-7xl
-                            flex justify-center items-center
-                            font-extrabold font-poiret
-                            drop-shadow-2xl
-                            text-center
+                            w-full flex justify-center items-center
+                            heading-hero text-center drop-shadow-2xl
                             min-h-[4.5rem] md:min-h-[6rem] lg:min-h-[7.5rem]
-                            transition-all duration-300
-                            px-2
-                            break-words
+                            transition-all duration-300 px-2 break-words
                         "
                     />
                 </div>
 
                 {/* Tagline */}
                 <div className="w-full flex justify-center transition-all duration-300">
-                    <h2
-                        className="
-                            p-2
-                            text-lg md:text-2xl lg:text-3xl
-                            font-bold font-poiret
-                            text-center
-                            drop-shadow-2xl
-                            text-zinc-500 dark:text-zinc-400
-                            transition-all duration-300
-                            max-w-2xl
-                        "
-                    >
+                    <h2 className="p-2 heading-tagline text-center drop-shadow-2xl transition-all duration-300 max-w-2xl">
                         {introduction?.tagline}
                     </h2>
                 </div>
@@ -114,17 +97,7 @@ function Introduction({ introduction, socialLinks }) {
                 >
                     <a
                         href={introduction?.resume}
-                        className="
-                            relative h-12 px-5 py-2.5
-                            overflow-hidden rounded
-                            text-lg font-semibold
-                            bg-zinc-950 dark:bg-zinc-50
-                            text-zinc-50 dark:text-zinc-950
-                            transition-all duration-300
-                            hover:bg-zinc-800 dark:hover:bg-zinc-200
-                            hover:ring-2 hover:ring-zinc-800 dark:hover:ring-zinc-200
-                            hover:ring-offset-2 dark:hover:ring-offset-zinc-950
-                        "
+                        className="px-5 py-3 rounded-xl text-sm md:text-base font-semibold bg-zinc-900 dark:bg-zinc-50 text-zinc-50 dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors"
                         target="_blank"
                         rel="noopener noreferrer"
                     >
@@ -132,17 +105,7 @@ function Introduction({ introduction, socialLinks }) {
                     </a>
                     <a
                         href="mailto:dev080405.patel@gmail.com"
-                        className="
-                            relative h-12 px-5 py-2.5
-                            overflow-hidden rounded
-                            text-lg font-semibold
-                            bg-zinc-950 dark:bg-zinc-50
-                            text-zinc-50 dark:text-zinc-950
-                            transition-all duration-300
-                            hover:bg-zinc-800 dark:hover:bg-zinc-200
-                            hover:ring-2 hover:ring-zinc-800 dark:hover:ring-zinc-200
-                            hover:ring-offset-2 dark:hover:ring-offset-zinc-950
-                        "
+                        className="px-5 py-3 rounded-xl text-sm md:text-base font-semibold bg-zinc-200 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-50 hover:bg-zinc-300 dark:hover:bg-zinc-700 transition-colors"
                         target="_blank"
                         rel="noopener noreferrer"
                     >

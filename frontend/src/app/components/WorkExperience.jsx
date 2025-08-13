@@ -25,14 +25,7 @@ function WorkExperience({ experience = [] }) {
                     transition-all duration-300
                 "
             >
-                <h3
-                    className="
-                        text-4xl md:text-5xl font-extrabold font-poiret mb-6
-                        text-zinc-900 dark:text-zinc-50
-                        text-center lg:text-left tracking-tight drop-shadow
-                        transition-all duration-300
-                    "
-                >
+                <h3 className="heading-section mb-6 text-zinc-900 dark:text-zinc-50 text-center lg:text-left drop-shadow transition-all duration-300">
                     💼 Work Experience
                 </h3>
                 <div className="w-full flex flex-col gap-6">
@@ -61,34 +54,16 @@ function WorkExperience({ experience = [] }) {
                                 />
                             )}
                             <div className="flex-1 flex flex-col items-center md:items-start">
-                                <h4
-                                    className="
-                                        font-bold text-lg md:text-2xl text-blue-900 dark:text-blue-200
-                                        mb-1 text-center md:text-left transition-all duration-300
-                                    "
-                                >
+                                <h4 className="heading-card mb-1 text-center md:text-left transition-all duration-300">
                                     {exp.title}
                                 </h4>
-                                <p
-                                    className="
-                                        text-sm md:text-base text-zinc-800 dark:text-zinc-100
-                                        mb-1 font-semibold text-center md:text-left
-                                        transition-all duration-300
-                                    "
-                                >
+                                <p className="text-body font-semibold mb-1 text-center md:text-left">
                                     {exp.company}
                                     {exp.location && (
-                                        <span className="ml-2 text-xs text-zinc-500 dark:text-zinc-400 font-mono">
-                                            {exp.location}
-                                        </span>
+                                        <span className="ml-2 text-meta">{exp.location}</span>
                                     )}
                                 </p>
-                                <p
-                                    className="
-                                        text-xs text-zinc-600 dark:text-zinc-400 font-mono mb-2
-                                        text-center md:text-left transition-all duration-300
-                                    "
-                                >
+                                <p className="text-meta mb-2 text-center md:text-left">
                                     {new Date(exp.startDate).toLocaleDateString()} -{' '}
                                     {exp.endDate
                                         ? new Date(exp.endDate).toLocaleDateString()
@@ -96,29 +71,18 @@ function WorkExperience({ experience = [] }) {
                                 </p>
                                 {Array.isArray(exp.responsibilities) &&
                                     exp.responsibilities.length > 0 && (
-                                        <ul
-                                            className="
-                                            list-disc list-inside
-                                            text-sm md:text-base text-zinc-600 dark:text-zinc-400
-                                            mb-2 space-y-1
-                                        "
-                                        >
+                                        <ul className="list-disc list-inside text-body mb-2 space-y-1">
                                             {exp.responsibilities.map((r, i) => (
                                                 <li key={i}>{r}</li>
                                             ))}
                                         </ul>
                                     )}
-                                {Array.isArray(exp.techStack) && exp.techStack.length > 0 && (
+                                {exp.techStack && exp.techStack.length > 0 && (
                                     <div className="flex flex-wrap gap-2 mt-1">
                                         {exp.techStack.map((tech, i) => (
                                             <span
                                                 key={i}
-                                                className="
-                                                    text-xs font-mono
-                                                    bg-zinc-200 dark:bg-zinc-800
-                                                    text-zinc-700 dark:text-zinc-200
-                                                    px-2 py-1 rounded
-                                                "
+                                                className="text-badge bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 px-2 py-1 rounded"
                                             >
                                                 {tech}
                                             </span>

@@ -55,20 +55,19 @@ function SocialLinks({ socialLinks = [] }) {
                             target="_blank"
                             rel="noopener noreferrer"
                             className="
-                                text-zinc-700 dark:text-zinc-200
-                                hover:text-zinc-900 dark:hover:text-zinc-50
-                                transition-colors duration-300
-                                flex items-center justify-center
-                                min-w-[40px] min-h-[40px]
+                                flex items-center gap-2
+                                text-meta
+                                hover:text-zinc-900 dark:hover:text-zinc-100
+                                transition-colors
                             "
                             aria-label={link.platform || link.icon || 'Social link'}
                         >
                             {icon ? (
-                                <FontAwesomeIcon icon={icon} size="2x" />
+                                <>
+                                    <FontAwesomeIcon icon={icon} className="h-7 w-7" />
+                                </>
                             ) : (
-                                <span className="text-base font-semibold">
-                                    {link.platform || 'Link'}
-                                </span>
+                                <span className="text-meta font-semibold">{link.platform}</span>
                             )}
                         </a>
                     );
