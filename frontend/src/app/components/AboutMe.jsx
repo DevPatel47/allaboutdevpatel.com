@@ -60,19 +60,19 @@ function AboutMe({ description }) {
                     >
                         👨‍💻 About Me
                     </h3>
-                    <p
+                    <div
                         className="
-                            text-lg md:text-xl font-mono
-                            text-zinc-800 dark:text-zinc-100
-                            text-left leading-relaxed
+                            text-base md:text-lg
+                            text-zinc-700 dark:text-zinc-300
+                            leading-relaxed text-left
                             w-full max-w-2xl
                             bg-zinc-50/95 dark:bg-zinc-900/90
                             rounded-xl p-6 shadow-md backdrop-blur-sm
                             transition-all duration-300
                         "
                     >
-                        <RichText text={description} />
-                    </p>
+                        <RichText text={description} as="div" />
+                    </div>
                     <div
                         className="
                             lg:hidden w-full mt-6 flex flex-col items-start gap-2

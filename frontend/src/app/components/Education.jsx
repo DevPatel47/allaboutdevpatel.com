@@ -162,14 +162,9 @@ function Education({ education = [] }) {
                                             </>
                                         )}
                                     </p>
-                                    <p
-                                        className="
-                                            text-sm md:text-base text-zinc-600 dark:text-zinc-400
-                                            transition-all duration-300
-                                        "
-                                    >
-                                        <RichText text={edu.description} />
-                                    </p>
+                                    <div className="text-sm md:text-base text-zinc-600 dark:text-zinc-400">
+                                        <RichText text={edu.description} as="div" />
+                                    </div>
                                 </div>
                             </div>
                         ))}

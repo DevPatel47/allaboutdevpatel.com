@@ -243,9 +243,9 @@ function Testimonials({ testimonials = [], userId }) {
                                 <p className="text-xs font-mono text-zinc-500 dark:text-zinc-400 mb-2 text-center md:text-left">
                                     {t.role}
                                 </p>
-                                <p className="text-sm md:text-base text-zinc-700 dark:text-zinc-300 mb-2 text-center md:text-left">
-                                    <RichText text={t.content} />
-                                </p>
+                                <div className="text-sm md:text-base text-zinc-700 dark:text-zinc-300 mb-2 text-center md:text-left">
+                                    <RichText text={t.content} as="div" />
+                                </div>
                                 {t.linkedIn && (
                                     <a
                                         href={t.linkedIn}

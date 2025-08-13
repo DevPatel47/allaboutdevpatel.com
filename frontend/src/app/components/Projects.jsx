@@ -80,9 +80,9 @@ function Projects({ projects = [] }) {
                                 <h4 className="font-bold text-lg md:text-2xl text-blue-900 dark:text-blue-200 mb-1 text-center md:text-left transition-all duration-300">
                                     {project.title}
                                 </h4>
-                                <p className="text-sm md:text-base text-zinc-700 dark:text-zinc-300 mb-1 text-center md:text-left">
-                                    <RichText text={project.description} />
-                                </p>
+                                <div className="text-sm md:text-base text-zinc-700 dark:text-zinc-300 mb-1 text-center md:text-left">
+                                    <RichText text={project.description} as="div" />
+                                </div>
                                 {project.techStack && project.techStack.length > 0 && (
                                     <div className="flex flex-wrap gap-2 mb-2">
                                         {project.techStack.map((tech, i) => (

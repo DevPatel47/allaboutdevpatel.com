@@ -206,14 +206,14 @@ function Projects() {
                                     >
                                         {project.title}
                                     </h2>
-                                    <p
+                                    <div
                                         className="
                                             text-xs font-mono text-zinc-600 dark:text-zinc-400
                                             leading-relaxed
                                         "
                                     >
-                                        <RichText text={project.description} />
-                                    </p>
+                                        <RichText text={project.description} as="div" />
+                                    </div>
 
                                     {project.techStack?.length > 0 && (
                                         <div className="flex flex-wrap gap-2">
