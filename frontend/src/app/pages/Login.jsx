@@ -82,7 +82,7 @@ function Login() {
                                         focus:outline-none focus:ring-2 focus:ring-blue-500/50
                                         transition-all
                                     "
-                                    placeholder="devpatel47 or you@example.com"
+                                    placeholder="example123 or you@example.com"
                                     required
                                 />
                             </div>
