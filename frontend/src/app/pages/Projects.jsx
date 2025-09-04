@@ -9,7 +9,7 @@ import { Loading, Error } from './pages.js';
 
 function Projects() {
     const { username } = useParams();
-    const DEFAULT_USERNAME = 'devpatel47';
+    const DEFAULT_USERNAME = 'devpatel';
 
     // State (renamed for clarity)
     const [projectList, setProjectList] = useState([]);
