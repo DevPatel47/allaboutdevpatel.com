@@ -335,6 +335,19 @@ function Admin() {
                                         required={f.required}
                                         accept={f.accept || '*'}
                                     />
+                                ) : f.type === 'checkbox' ? (
+                                    <input
+                                        type="checkbox"
+                                        name={f.name}
+                                        checked={!!formState[f.name]}
+                                        onChange={(e) =>
+                                            setFormState({
+                                                ...formState,
+                                                [f.name]: e.target.checked,
+                                            })
+                                        }
+                                        className="w-5 h-5 accent-blue-600"
+                                    />
                                 ) : (
                                     <input
                                         type={f.type || 'text'}
@@ -418,6 +431,15 @@ function Admin() {
                                         setFormState({ ...formState, [f.name]: e.target.value })
                                     }
                                     className={inputClasses()}
+                                />
+                            ) : f.type === 'checkbox' ? (
+                                <input
+                                    type="checkbox"
+                                    checked={!!formState[f.name]}
+                                    onChange={(e) =>
+                                        setFormState({ ...formState, [f.name]: e.target.checked })
+                                    }
+                                    className="w-5 h-5 accent-blue-600"
                                 />
                             ) : (
                                 <input
@@ -800,11 +822,12 @@ function Admin() {
                                     required: true,
                                 },
                                 { name: 'techStack', label: 'Tech Stack (comma)', required: true },
-                                { name: 'video', label: 'Video URL', required: true },
-                                { name: 'liveLink', label: 'Live Link', required: true },
+                                { name: 'video', label: 'Video URL' },
+                                { name: 'liveLink', label: 'Live Link' },
                                 { name: 'repoLink', label: 'Repo Link', required: true },
                                 { name: 'tags', label: 'Tags (comma)', required: true },
                                 { name: 'image', label: 'Image', type: 'file', accept: 'image/*' },
+                                { name: 'featured', label: 'Featured', type: 'checkbox' }, // <-- Added
                             ]}
                         />
                         <div className="grid md:grid-cols-2 gap-4">
@@ -816,6 +839,7 @@ function Admin() {
                                             ...project,
                                             techStack: project.techStack.join(', '),
                                             tags: project.tags.join(', '),
+                                            featured: !!project.featured, // ensure boolean
                                         }}
                                         onCancel={() => setEditProjectId(null)}
                                         onSave={async (id, payload) => {
@@ -848,6 +872,11 @@ function Admin() {
                                                 type: 'file',
                                                 accept: 'image/*',
                                             },
+                                            {
+                                                name: 'featured',
+                                                label: 'Featured',
+                                                type: 'checkbox',
+                                            },
                                         ]}
                                     />
                                 ) : (
@@ -858,6 +887,7 @@ function Admin() {
                                             project.title,
                                             project.slug,
                                             project.techStack.join(', '),
+                                            project.featured ? 'Featured' : '',
                                         ]}
                                         onDelete={() => handleDeleteProject(project._id)}
                                         onBeginEdit={() => setEditProjectId(project._id)}

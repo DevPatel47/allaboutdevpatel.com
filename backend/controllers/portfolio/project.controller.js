@@ -35,8 +35,6 @@ const createProject = asyncHandler(async (req, res) => {
         !slug ||
         !description ||
         !techStack.length ||
-        !video ||
-        !liveLink ||
         !repoLink ||
         !tags.length
     ) {
@@ -76,8 +74,8 @@ const createProject = asyncHandler(async (req, res) => {
         slug,
         description,
         techStack,
-        video,
-        liveLink,
+        video: video || '',
+        liveLink: liveLink || '',
         repoLink,
         tags,
         featured: featured || false,
@@ -201,8 +199,6 @@ const updateProject = asyncHandler(async (req, res) => {
         !slug ||
         !description ||
         !techStack.length ||
-        !video ||
-        !liveLink ||
         !repoLink ||
         !tags.length
     ) {
@@ -245,8 +241,8 @@ const updateProject = asyncHandler(async (req, res) => {
             slug,
             description,
             techStack,
-            video,
-            liveLink,
+            video: video || project.video,
+            liveLink: liveLink || project.liveLink,
             repoLink,
             tags,
             featured: featured || project.featured,
