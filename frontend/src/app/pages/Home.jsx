@@ -8,7 +8,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Router, useParams, useNavigate } from 'react-router-dom';
 import PortfolioService from '../services/portfolio/portfolio.service.js';
 import {
     Introduction,
@@ -30,6 +30,7 @@ import { Error, Loading } from './pages.js';
  */
 function Home() {
     const { username } = useParams();
+    const navigate = useNavigate();
 
     const [portfolio, setPortfolio] = useState(null);
     const [error, setError] = useState(false);
@@ -42,9 +43,14 @@ function Home() {
                 setLoading(true);
                 let data;
                 if (username) {
-                    data = await PortfolioService.getByUsername(username);
+                    try {
+                        const response = await PortfolioService.getByUsername(username);
+                        data = response;
+                    } catch (error) {
+                        navigate("/");
+                    }
                 } else {
-                    data = await PortfolioService.getByUsername('devpatel47');
+                    data = await PortfolioService.getByUsername('devpatel');
                 }
                 if (isMounted) {
                     setPortfolio(data?.portfolio || data);
