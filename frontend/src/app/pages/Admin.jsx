@@ -31,6 +31,8 @@ const ADMIN_TABS = [
     'Certifications',
     'Social Links',
     'Testimonials',
+    'Users',
+    'Profile',
 ];
 
 function Field({ label, children }) {
@@ -62,6 +64,7 @@ function Admin() {
     const [certificationList, setCertificationList] = useState([]);
     const [socialLinks, setSocialLinks] = useState([]);
     const [testimonialList, setTestimonialList] = useState([]);
+    const [userList, setUserList] = useState([]);
 
     /* Edit selection ids */
     const [editEducationId, setEditEducationId] = useState(null);
@@ -71,6 +74,28 @@ function Admin() {
     const [editCertificationId, setEditCertificationId] = useState(null);
     const [editSocialLinkId, setEditSocialLinkId] = useState(null);
     const [editTestimonialId, setEditTestimonialId] = useState(null);
+    const [editUserId, setEditUserId] = useState(null);
+
+    const [userSearch, setUserSearch] = useState('');
+    const [createUserOpen, setCreateUserOpen] = useState(false);
+    const [createUserForm, setCreateUserForm] = useState({
+        username: '',
+        email: '',
+        password: '',
+        role: 'user',
+        profileImage: null,
+    });
+    const [profileEditOpen, setProfileEditOpen] = useState(false);
+    const [profileForm, setProfileForm] = useState({
+        username: '',
+        email: '',
+        profileImage: null,
+    });
+    const [profilePwdOpen, setProfilePwdOpen] = useState(false);
+    const [profilePwdForm, setProfilePwdForm] = useState({
+        currentPassword: '',
+        newPassword: '',
+    });
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -237,6 +262,19 @@ function Admin() {
         },
     );
 
+    const handleCreateUser = async (form) => {
+        try {
+            setGlobalStatus('Creating user...');
+            const fd = new FormData();
+            Object.entries(form).forEach(([k, v]) => fd.append(k, v));
+            const newUser = await UserService.register(fd);
+            setUserList((prev) => [newUser, ...prev]);
+            setGlobalStatus('User created');
+        } catch (e) {
+            setGlobalStatus(e.message);
+        }
+    };
+
     /* Update handlers */
     const handleUpdateEducation = updateEntity(setEducationList, educationList, (id, fd) =>
         educationService.update(id, fd),
@@ -262,6 +300,18 @@ function Admin() {
         testimonialService.update(id, fd),
     );
 
+    /* User role update handler */
+    const handleUpdateUserRole = async (id, role) => {
+        try {
+            setGlobalStatus('Updating role...');
+            const updated = await UserService.updateRole(id, role);
+            setUserList((list) => list.map((u) => (u._id === updated._id ? updated : u)));
+            setGlobalStatus('Role updated');
+        } catch (e) {
+            setGlobalStatus(e.message);
+        }
+    };
+
     /* Delete handlers */
     const handleDeleteEducation = deleteEntity(setEducationList, educationList, (id) =>
         educationService.delete(id),
@@ -284,6 +334,47 @@ function Admin() {
     const handleDeleteTestimonial = deleteEntity(setTestimonialList, testimonialList, (id) =>
         testimonialService.delete(id),
     );
+    const handleDeleteUser = async (id) => {
+        if (!confirm('Delete this user?')) return;
+        try {
+            setGlobalStatus('Deleting user...');
+            await UserService.deleteUser(id);
+            setUserList((list) => list.filter((u) => u._id !== id));
+            setGlobalStatus('User deleted');
+        } catch (e) {
+            setGlobalStatus(e.message);
+        }
+    };
+    const handleUpdateOwnProfile = async (form) => {
+        try {
+            setGlobalStatus('Updating profile...');
+            const fd = new FormData();
+            Object.entries(form).forEach(([k, v]) => fd.append(k, v));
+            const updated = await UserService.update(currentUser._id, fd);
+            setCurrentUser(updated);
+            setGlobalStatus('Profile updated');
+            setProfileEditOpen(false);
+        } catch (e) {
+            setGlobalStatus(e.message);
+        }
+    };
+
+    const handleUpdateOwnPassword = async (e) => {
+        e.preventDefault();
+        try {
+            setGlobalStatus('Updating password...');
+            await UserService.changePassword(
+                currentUser._id,
+                profilePwdForm.newPassword,
+                profilePwdForm.currentPassword,
+            );
+            setGlobalStatus('Password updated');
+            setProfilePwdOpen(false);
+            setProfilePwdForm({ currentPassword: '', newPassword: '' });
+        } catch (e) {
+            setGlobalStatus(e.message);
+        }
+    };
 
     /* Reusable create form */
     const CreateSection = ({ label, fields, onCreate }) => {
@@ -1084,6 +1175,350 @@ function Admin() {
                             )}
                         </div>
                     </>
+                );
+
+            case 'Users':
+                return (
+                    <div className="flex flex-col gap-6">
+                        <div className="flex gap-2 mb-2">
+                            <input
+                                value={userSearch}
+                                onChange={(e) => setUserSearch(e.target.value)}
+                                placeholder="Search users..."
+                                className={inputClasses()}
+                            />
+                            <button
+                                onClick={async () => {
+                                    setGlobalStatus('Refreshing...');
+                                    const users = await UserService.getAllUsers();
+                                    setUserList(users);
+                                    setGlobalStatus('');
+                                }}
+                                className="px-3 py-2 rounded bg-zinc-600 text-white text-xs"
+                            >
+                                Refresh
+                            </button>
+                            <button
+                                onClick={() => setCreateUserOpen((o) => !o)}
+                                className="px-3 py-2 rounded bg-emerald-600 text-white text-xs"
+                            >
+                                {createUserOpen ? 'Close' : 'Create User'}
+                            </button>
+                        </div>
+                        {createUserOpen && (
+                            <form
+                                onSubmit={async (e) => {
+                                    e.preventDefault();
+                                    await handleCreateUser(createUserForm);
+                                    setCreateUserForm({
+                                        username: '',
+                                        email: '',
+                                        password: '',
+                                        role: 'user',
+                                        profileImage: null,
+                                    });
+                                    setCreateUserOpen(false);
+                                }}
+                                className="flex flex-col gap-3 p-4 border rounded-xl bg-zinc-50/80 dark:bg-zinc-800/60"
+                            >
+                                <Field label="Username">
+                                    <input
+                                        type="text"
+                                        value={createUserForm.username}
+                                        onChange={(e) =>
+                                            setCreateUserForm({
+                                                ...createUserForm,
+                                                username: e.target.value,
+                                            })
+                                        }
+                                        className={inputClasses()}
+                                        required
+                                    />
+                                </Field>
+                                <Field label="Email">
+                                    <input
+                                        type="email"
+                                        value={createUserForm.email}
+                                        onChange={(e) =>
+                                            setCreateUserForm({
+                                                ...createUserForm,
+                                                email: e.target.value,
+                                            })
+                                        }
+                                        className={inputClasses()}
+                                        required
+                                    />
+                                </Field>
+                                <Field label="Password">
+                                    <input
+                                        type="password"
+                                        value={createUserForm.password}
+                                        onChange={(e) =>
+                                            setCreateUserForm({
+                                                ...createUserForm,
+                                                password: e.target.value,
+                                            })
+                                        }
+                                        className={inputClasses()}
+                                        required
+                                    />
+                                </Field>
+                                <Field label="Role">
+                                    <select
+                                        value={createUserForm.role}
+                                        onChange={(e) =>
+                                            setCreateUserForm({
+                                                ...createUserForm,
+                                                role: e.target.value,
+                                            })
+                                        }
+                                        className={inputClasses()}
+                                    >
+                                        <option value="user">user</option>
+                                        <option value="admin">admin</option>
+                                    </select>
+                                </Field>
+                                <Field label="Profile Image">
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={(e) =>
+                                            setCreateUserForm({
+                                                ...createUserForm,
+                                                profileImage: e.target.files[0],
+                                            })
+                                        }
+                                        className="text-xs"
+                                    />
+                                </Field>
+                                <div className="flex gap-2 justify-end">
+                                    <button
+                                        type="submit"
+                                        className="px-4 py-2 rounded bg-blue-600 text-white text-sm"
+                                    >
+                                        Create
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setCreateUserOpen(false)}
+                                        className="px-4 py-2 rounded bg-zinc-600 text-white text-sm"
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            </form>
+                        )}
+                        <div className="overflow-x-auto border border-zinc-200 dark:border-zinc-700 rounded-xl">
+                            <table className="w-full text-xs md:text-sm">
+                                <thead className="bg-zinc-200 dark:bg-zinc-800 text-left">
+                                    <tr>
+                                        <th className="px-3 py-2">Username</th>
+                                        <th className="px-3 py-2">Email</th>
+                                        <th className="px-3 py-2">Role</th>
+                                        <th className="px-3 py-2">Created</th>
+                                        <th className="px-3 py-2 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {userList
+                                        .filter((u) => {
+                                            if (!userSearch.trim()) return true;
+                                            const q = userSearch.toLowerCase();
+                                            return (
+                                                u.username?.toLowerCase().includes(q) ||
+                                                u.email?.toLowerCase().includes(q) ||
+                                                u.role?.toLowerCase().includes(q)
+                                            );
+                                        })
+                                        .map((u) => (
+                                            <tr
+                                                key={u._id}
+                                                className="border-t border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100/60 dark:hover:bg-zinc-800/40"
+                                            >
+                                                <td className="px-3 py-2">{u.username}</td>
+                                                <td className="px-3 py-2 break-all">{u.email}</td>
+                                                <td className="px-3 py-2">
+                                                    <span
+                                                        className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${
+                                                            u.role === 'admin'
+                                                                ? 'bg-amber-500 text-white'
+                                                                : 'bg-zinc-700 text-white'
+                                                        }`}
+                                                    >
+                                                        {u.role}
+                                                    </span>
+                                                </td>
+                                                <td className="px-3 py-2">
+                                                    {u.createdAt
+                                                        ? new Date(u.createdAt).toLocaleDateString()
+                                                        : '-'}
+                                                </td>
+                                                <td className="px-3 py-2">
+                                                    <div className="flex gap-2 justify-end">
+                                                        {u._id !== currentUser._id && (
+                                                            <>
+                                                                <button
+                                                                    onClick={() =>
+                                                                        handleUpdateUserRole(
+                                                                            u._id,
+                                                                            u.role === 'admin'
+                                                                                ? 'user'
+                                                                                : 'admin',
+                                                                        )
+                                                                    }
+                                                                    className="px-2 py-1 rounded bg-blue-600 text-white text-[10px]"
+                                                                >
+                                                                    {u.role === 'admin'
+                                                                        ? 'Set User'
+                                                                        : 'Set Admin'}
+                                                                </button>
+                                                                <button
+                                                                    onClick={() =>
+                                                                        handleDeleteUser(u._id)
+                                                                    }
+                                                                    className="px-2 py-1 rounded bg-red-600 text-white text-[10px]"
+                                                                >
+                                                                    Delete
+                                                                </button>
+                                                            </>
+                                                        )}
+                                                        {u._id === currentUser._id && (
+                                                            <span className="text-[10px] text-emerald-600">
+                                                                (you)
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    {userList.length === 0 && (
+                                        <tr>
+                                            <td
+                                                colSpan={5}
+                                                className="px-3 py-6 text-center text-zinc-500"
+                                            >
+                                                No users
+                                            </td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                );
+
+            case 'Profile':
+                return (
+                    <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-100/70 dark:bg-zinc-800/60 flex flex-col gap-4">
+                        <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+                            Your Profile
+                        </h2>
+                        <form
+                            onSubmit={async (e) => {
+                                e.preventDefault();
+                                await handleUpdateOwnProfile(profileForm);
+                            }}
+                            className="flex flex-col gap-4"
+                        >
+                            <div className="grid md:grid-cols-2 gap-4">
+                                <Field label="Username">
+                                    <input
+                                        type="text"
+                                        value={profileForm.username}
+                                        onChange={(e) =>
+                                            setProfileForm({
+                                                ...profileForm,
+                                                username: e.target.value,
+                                            })
+                                        }
+                                        className={inputClasses()}
+                                        required
+                                    />
+                                </Field>
+                                <Field label="Email">
+                                    <input
+                                        type="email"
+                                        value={profileForm.email}
+                                        onChange={(e) =>
+                                            setProfileForm({
+                                                ...profileForm,
+                                                email: e.target.value,
+                                            })
+                                        }
+                                        className={inputClasses()}
+                                        required
+                                    />
+                                </Field>
+                                <Field label="Profile Image">
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={(e) =>
+                                            setProfileForm({
+                                                ...profileForm,
+                                                profileImage: e.target.files[0],
+                                            })
+                                        }
+                                        className="text-xs"
+                                    />
+                                </Field>
+                            </div>
+                            <div className="flex justify-end gap-2">
+                                <button
+                                    type="submit"
+                                    className="px-4 py-2 rounded bg-blue-600 text-white text-sm"
+                                >
+                                    Update Profile
+                                </button>
+                            </div>
+                        </form>
+                        <div className="border-t border-zinc-200 dark:border-zinc-700 pt-4 mt-4">
+                            <h3 className="text-md font-semibold text-zinc-900 dark:text-zinc-50">
+                                Change Password
+                            </h3>
+                            <form
+                                onSubmit={handleUpdateOwnPassword}
+                                className="flex flex-col gap-4"
+                            >
+                                <Field label="Current Password">
+                                    <input
+                                        type="password"
+                                        value={profilePwdForm.currentPassword}
+                                        onChange={(e) =>
+                                            setProfilePwdForm({
+                                                ...profilePwdForm,
+                                                currentPassword: e.target.value,
+                                            })
+                                        }
+                                        className={inputClasses()}
+                                        required
+                                    />
+                                </Field>
+                                <Field label="New Password">
+                                    <input
+                                        type="password"
+                                        value={profilePwdForm.newPassword}
+                                        onChange={(e) =>
+                                            setProfilePwdForm({
+                                                ...profilePwdForm,
+                                                newPassword: e.target.value,
+                                            })
+                                        }
+                                        className={inputClasses()}
+                                        required
+                                    />
+                                </Field>
+                                <div className="flex justify-end gap-2">
+                                    <button
+                                        type="submit"
+                                        className="px-4 py-2 rounded bg-blue-600 text-white text-sm"
+                                    >
+                                        Change Password
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 );
 
             default:
