@@ -106,7 +106,7 @@ function Header() {
                         Github
                     </NavLink>
                     <NavLink
-                        to={`${basePath}/admin`}
+                        to={`/admin`}
                         end
                         className={({ isActive }) =>
                             (isActive ? '' : 'text-zinc-500 dark:text-zinc-400') +
