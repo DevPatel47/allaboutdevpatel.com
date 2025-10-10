@@ -1,145 +1,79 @@
-import nodemailer from 'nodemailer';
 import { asyncHandler } from '../../utils/asyncHandler.js';
 import { ApiError } from '../../utils/ApiError.js';
 import { ApiResponse } from '../../utils/ApiResponse.js';
 
-// Try different SMTP configurations
-const createTransporter = () => {
-    // Try Gmail with different port configurations
-    const configs = [
-        {
-            name: 'Gmail Port 587 (TLS)',
-            host: 'smtp.gmail.com',
-            port: 587,
-            secure: false,
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS,
-            },
-        },
-        {
-            name: 'Gmail Port 465 (SSL)',
-            host: 'smtp.gmail.com',
-            port: 465,
-            secure: true,
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS,
-            },
-        },
-        {
-            name: 'Gmail Port 25 (Legacy)',
-            host: 'smtp.gmail.com',
-            port: 25,
-            secure: false,
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS,
-            },
-        },
-    ];
-
-    return configs.map((config) => ({
-        ...config,
-        transporter: nodemailer.createTransport({
-            host: config.host,
-            port: config.port,
-            secure: config.secure,
-            auth: config.auth,
-            connectionTimeout: 10000,
-            greetingTimeout: 10000,
-            socketTimeout: 10000,
-            debug: true,
-            logger: true,
-        }),
-    }));
-};
-
 export const sendContactMessage = asyncHandler(async (req, res) => {
-    console.log('Contact form submission:', req.body);
     const { name, email, subject, message } = req.body || {};
 
     if (!name?.trim() || !email?.trim() || !subject?.trim() || !message?.trim()) {
         throw new ApiError(400, 'All fields are required');
     }
 
-    const mailOptions = {
-        from: `"${name} via Portfolio" <${process.env.EMAIL_USER}>`,
-        to: process.env.CONTACT_TO || process.env.EMAIL_USER,
-        replyTo: email,
-        subject: `[Portfolio Contact] ${subject}`,
-        text: `From: ${name} <${email}>\n\nMessage:\n${message}`,
-        html: `
-            <h3>New Contact Form Submission</h3>
-            <p><strong>Name:</strong> ${name}</p>
-            <p><strong>Email:</strong> ${email}</p>
-            <p><strong>Subject:</strong> ${subject}</p>
-            <p><strong>Message:</strong></p>
-            <p>${message.replace(/\n/g, '<br/>')}</p>
-            <hr>
-            <p><em>Sent from Portfolio Contact Form</em></p>
-        `,
-    };
+    // Prepare Web3Forms data as URL-encoded form data
+    const formData = new URLSearchParams();
+    formData.append('access_key', process.env.WEB3FORMS_ACCESS_KEY);
+    formData.append('name', name);
+    formData.append('email', email);
+    formData.append('subject', `[Portfolio Contact] ${subject}`);
+    formData.append('message', `From: ${name} <${email}>\n\nMessage:\n${message}`);
+    formData.append('from_name', 'Portfolio Contact Form');
+    formData.append('redirect', 'false'); // Don't redirect, return JSON
 
-    const transporters = createTransporter();
-    let emailSent = false;
-    let result;
+    try {
+        // Send to Web3Forms API
+        const response = await fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: formData.toString(),
+        });
 
-    // Try each SMTP configuration
-    for (const config of transporters) {
-        try {
-            console.log(`Trying ${config.name}...`);
-
-            // Test connection
-            const verifyPromise = config.transporter.verify();
-            const verifyTimeout = new Promise((_, reject) =>
-                setTimeout(() => reject(new Error('Connection timeout')), 8000),
-            );
-
-            await Promise.race([verifyPromise, verifyTimeout]);
-            console.log(`${config.name} connection verified`);
-
-            // Send email
-            const emailPromise = config.transporter.sendMail(mailOptions);
-            const emailTimeout = new Promise((_, reject) =>
-                setTimeout(() => reject(new Error('Send timeout')), 10000),
-            );
-
-            result = await Promise.race([emailPromise, emailTimeout]);
-            emailSent = true;
-            console.log(`Email sent successfully via ${config.name}:`, result.messageId);
-            config.transporter.close();
-            break;
-        } catch (error) {
-            console.log(`${config.name} failed:`, error.message);
-            config.transporter.close();
-            continue;
+        // Check if response is ok first
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Web3Forms HTTP error:', response.status, errorText);
+            throw new ApiError(response.status, `Failed to send message: HTTP ${response.status}`);
         }
-    }
 
-    if (emailSent) {
-        return res.status(200).json(
-            new ApiResponse(200, 'Message sent successfully', {
-                ok: true,
-                messageId: result.messageId,
-            }),
-        );
-    } else {
-        // If all SMTP methods fail, log the submission
-        console.log('=== ALL SMTP METHODS FAILED - LOGGING SUBMISSION ===');
-        console.log(`Name: ${name}`);
-        console.log(`Email: ${email}`);
-        console.log(`Subject: ${subject}`);
-        console.log(`Message: ${message}`);
-        console.log(`Timestamp: ${new Date().toISOString()}`);
-        console.log('===============================================');
+        // Check content type before parsing JSON
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            const textResponse = await response.text();
 
-        // Check if ports are blocked by testing connectivity
-        console.log('Testing port connectivity...');
+            // If it contains success indicators, treat as success
+            if (textResponse.includes('success') || textResponse.includes('sent')) {
+                return res.status(200).json(
+                    new ApiResponse(200, 'Message sent successfully', {
+                        ok: true,
+                    }),
+                );
+            }
 
-        throw new ApiError(
-            503,
-            'Email service temporarily unavailable. Your message has been logged and we will contact you soon.',
-        );
+            throw new ApiError(400, 'Unexpected response format from email service');
+        }
+
+        // Parse JSON response
+        const result = await response.json();
+
+        if (result.success) {
+            return res.status(200).json(
+                new ApiResponse(200, 'Message sent successfully', {
+                    ok: true,
+                }),
+            );
+        } else {
+            throw new ApiError(400, result.message || 'Failed to send message');
+        }
+    } catch (error) {
+        console.error('Web3Forms error:', error.message);
+
+        // If it's our custom ApiError, re-throw it
+        if (error instanceof ApiError) {
+            throw error;
+        }
+
+        // For any other errors (like JSON parsing), throw a generic error
+        throw new ApiError(500, 'Failed to send message due to service error');
     }
 });

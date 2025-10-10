@@ -15,30 +15,78 @@ function ContactMe() {
     const onSubmit = async (e) => {
         e.preventDefault();
         if (!canSubmit || status.sending) return;
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 30000);
+
         try {
             setStatus({ sending: true, ok: null, msg: '' });
 
-            const apiBaseUrl = process.env.VITE_API_BASE_URL || '';
-            const apiUrl = `${apiBaseUrl}/api/v1/contact`;
+            const apiUrl = '/api/v1/contact';
+
+            console.log('Sending request to:', apiUrl);
+            console.log('Request payload:', form);
 
             const res = await fetch(apiUrl, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                },
                 body: JSON.stringify(form),
+                signal: controller.signal,
             });
 
+            clearTimeout(timeoutId);
+
+            console.log('Response status:', res.status);
+
+            // Handle non-JSON responses (like HTML error pages)
+            const contentType = res.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                const textResponse = await res.text();
+                console.error('Non-JSON response:', textResponse);
+
+                if (textResponse.includes('504 Gateway Time-out')) {
+                    throw new Error('Server timeout - please try again in a few moments');
+                } else if (textResponse.includes('502 Bad Gateway')) {
+                    throw new Error('Server is temporarily unavailable');
+                } else {
+                    throw new Error('Server error - please try again later');
+                }
+            }
+
             const data = await res.json();
-            if (!res.ok) throw new Error(data.message || 'Failed');
-            setStatus({ sending: false, ok: true, msg: 'Message sent successfully.' });
+            console.log('Response data:', data);
+
+            if (!res.ok) {
+                throw new Error(data.message || `Server error: ${res.status}`);
+            }
+
+            // Handle successful response
+            let successMessage = 'Message sent successfully!';
+
+            // Check if it was sent via Web3Forms or fallback
+            if (data.data?.fallback) {
+                successMessage = 'Message received! We will get back to you soon.';
+            } else if (data.data?.provider === 'Web3Forms') {
+                successMessage = 'Message sent successfully via Web3Forms!';
+            }
+
+            setStatus({ sending: false, ok: true, msg: successMessage });
             setForm({ name: '', email: '', subject: '', message: '' });
         } catch (err) {
+            clearTimeout(timeoutId);
             console.error('Contact form error:', err);
+
             let errorMessage = 'Error sending message.';
 
-            // Handle specific API route not found error
-            if (err.message.includes('API route not found')) {
-                errorMessage =
-                    'Contact service is temporarily unavailable. Please try again later.';
+            if (err.name === 'AbortError') {
+                errorMessage = 'Request timed out. Please try again.';
+            } else if (err.message.includes('fetch') || err.message.includes('network')) {
+                errorMessage = 'Network error. Please check your connection and try again.';
+            } else if (err.message.includes('timeout')) {
+                errorMessage = 'Server is taking too long to respond. Please try again.';
             } else if (err.message) {
                 errorMessage = err.message;
             }
@@ -172,28 +220,29 @@ function ContactMe() {
                         />
                     </div>
                     {status.msg && (
-                        <p
-                            className={`text-meta ${
+                        <div
+                            className={`p-3 rounded-lg text-sm ${
                                 status.ok
-                                    ? 'text-green-700 dark:text-green-400'
-                                    : 'text-red-600 dark:text-red-400'
+                                    ? 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800'
+                                    : 'bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800'
                             }`}
                         >
                             {status.msg}
-                        </p>
+                        </div>
                     )}
                     <div className="flex justify-end">
                         <button
                             type="submit"
                             disabled={!canSubmit || status.sending}
                             className="
-                                px-5 py-3 rounded-xl
+                                px-6 py-3 rounded-xl
                                 text-sm md:text-base font-semibold
                                 bg-zinc-900 dark:bg-zinc-50
                                 text-zinc-50 dark:text-zinc-900
                                 hover:bg-zinc-800 dark:hover:bg-zinc-200
-                                transition-colors
                                 disabled:opacity-50 disabled:cursor-not-allowed
+                                transition-colors duration-200
+                                min-w-[120px]
                             "
                             aria-busy={status.sending}
                         >
