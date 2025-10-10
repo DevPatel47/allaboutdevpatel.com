@@ -17,17 +17,33 @@ function ContactMe() {
         if (!canSubmit || status.sending) return;
         try {
             setStatus({ sending: true, ok: null, msg: '' });
-            const res = await fetch('/api/v1/contact', {
+
+            const apiBaseUrl = process.env.VITE_API_BASE_URL || '';
+            const apiUrl = `${apiBaseUrl}/api/v1/contact`;
+
+            const res = await fetch(apiUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(form),
             });
+
             const data = await res.json();
             if (!res.ok) throw new Error(data.message || 'Failed');
             setStatus({ sending: false, ok: true, msg: 'Message sent successfully.' });
             setForm({ name: '', email: '', subject: '', message: '' });
         } catch (err) {
-            setStatus({ sending: false, ok: false, msg: err.message || 'Error sending message.' });
+            console.error('Contact form error:', err);
+            let errorMessage = 'Error sending message.';
+
+            // Handle specific API route not found error
+            if (err.message.includes('API route not found')) {
+                errorMessage =
+                    'Contact service is temporarily unavailable. Please try again later.';
+            } else if (err.message) {
+                errorMessage = err.message;
+            }
+
+            setStatus({ sending: false, ok: false, msg: errorMessage });
         }
     };
 
