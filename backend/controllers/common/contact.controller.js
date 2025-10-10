@@ -14,6 +14,7 @@ const transporter = nodemailer.createTransport({
 });
 
 export const sendContactMessage = asyncHandler(async (req, res) => {
+    console.log('Contact form submission:', req.body);
     const { name, email, subject, message } = req.body || {};
     if (!name?.trim() || !email?.trim() || !subject?.trim() || !message?.trim()) {
         throw new ApiError(400, 'All fields are required');
