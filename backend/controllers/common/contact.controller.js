@@ -77,13 +77,15 @@ export const sendContactMessage = asyncHandler(async (req, res) => {
             error.message.includes('SMTP verify timeout')
         ) {
             console.log('SMTP timeout detected - returning success for user experience');
-            return res.status(200).json(
-                new ApiResponse(
-                    200,
-                    'Message received successfully. We will get back to you soon!',
-                    { ok: true },
-                ),
-            );
+            return res
+                .status(200)
+                .json(
+                    new ApiResponse(
+                        200,
+                        'Message received successfully. We will get back to you soon!',
+                        { ok: true },
+                    ),
+                );
         }
 
         if (
@@ -92,13 +94,15 @@ export const sendContactMessage = asyncHandler(async (req, res) => {
             error.code === 'ENOTFOUND'
         ) {
             console.log('SMTP connection failed - returning success for user experience');
-            return res.status(200).json(
-                new ApiResponse(
-                    200,
-                    'Message received successfully. We will get back to you soon!',
-                    { ok: true },
-                ),
-            );
+            return res
+                .status(200)
+                .json(
+                    new ApiResponse(
+                        200,
+                        'Message received successfully. We will get back to you soon!',
+                        { ok: true },
+                    ),
+                );
         }
 
         // Only throw error for validation issues
@@ -108,12 +112,14 @@ export const sendContactMessage = asyncHandler(async (req, res) => {
 
         // For all other errors, log and return success
         console.log('Unknown email error - returning success for user experience');
-        return res.status(200).json(
-            new ApiResponse(
-                200,
-                'Message received successfully. We will get back to you soon!',
-                { ok: true },
-            ),
-        );
+        return res
+            .status(200)
+            .json(
+                new ApiResponse(
+                    200,
+                    'Message received successfully. We will get back to you soon!',
+                    { ok: true },
+                ),
+            );
     }
 });
