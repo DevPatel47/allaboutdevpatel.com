@@ -22,12 +22,7 @@ function ContactMe() {
         try {
             setStatus({ sending: true, ok: null, msg: '' });
 
-            const apiUrl = '/api/v1/contact';
-
-            console.log('Sending request to:', apiUrl);
-            console.log('Request payload:', form);
-
-            const res = await fetch(apiUrl, {
+            const res = await fetch('/api/v1/contact', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -39,13 +34,10 @@ function ContactMe() {
 
             clearTimeout(timeoutId);
 
-            console.log('Response status:', res.status);
-
             // Handle non-JSON responses (like HTML error pages)
             const contentType = res.headers.get('content-type');
             if (!contentType || !contentType.includes('application/json')) {
                 const textResponse = await res.text();
-                console.error('Non-JSON response:', textResponse);
 
                 if (textResponse.includes('504 Gateway Time-out')) {
                     throw new Error('Server timeout - please try again in a few moments');
@@ -57,27 +49,15 @@ function ContactMe() {
             }
 
             const data = await res.json();
-            console.log('Response data:', data);
 
             if (!res.ok) {
                 throw new Error(data.message || `Server error: ${res.status}`);
             }
 
-            // Handle successful response
-            let successMessage = 'Message sent successfully!';
-
-            // Check if it was sent via Web3Forms or fallback
-            if (data.data?.fallback) {
-                successMessage = 'Message received! We will get back to you soon.';
-            } else if (data.data?.provider === 'Web3Forms') {
-                successMessage = 'Message sent successfully via Web3Forms!';
-            }
-
-            setStatus({ sending: false, ok: true, msg: successMessage });
+            setStatus({ sending: false, ok: true, msg: 'Message sent successfully.' });
             setForm({ name: '', email: '', subject: '', message: '' });
         } catch (err) {
             clearTimeout(timeoutId);
-            console.error('Contact form error:', err);
 
             let errorMessage = 'Error sending message.';
 
@@ -220,29 +200,28 @@ function ContactMe() {
                         />
                     </div>
                     {status.msg && (
-                        <div
-                            className={`p-3 rounded-lg text-sm ${
+                        <p
+                            className={`text-meta ${
                                 status.ok
-                                    ? 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800'
-                                    : 'bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800'
+                                    ? 'text-green-700 dark:text-green-400'
+                                    : 'text-red-600 dark:text-red-400'
                             }`}
                         >
                             {status.msg}
-                        </div>
+                        </p>
                     )}
                     <div className="flex justify-end">
                         <button
                             type="submit"
                             disabled={!canSubmit || status.sending}
                             className="
-                                px-6 py-3 rounded-xl
+                                px-5 py-3 rounded-xl
                                 text-sm md:text-base font-semibold
                                 bg-zinc-900 dark:bg-zinc-50
                                 text-zinc-50 dark:text-zinc-900
                                 hover:bg-zinc-800 dark:hover:bg-zinc-200
+                                transition-colors
                                 disabled:opacity-50 disabled:cursor-not-allowed
-                                transition-colors duration-200
-                                min-w-[120px]
                             "
                             aria-busy={status.sending}
                         >
