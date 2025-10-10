@@ -41,7 +41,7 @@ const createTransporter = () => {
 
     return configs.map((config) => ({
         ...config,
-        transporter: nodemailer.createTransporter({
+        transporter: nodemailer.createTransport({
             host: config.host,
             port: config.port,
             secure: config.secure,
