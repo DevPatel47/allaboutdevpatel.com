@@ -14,11 +14,13 @@ import Projects from './Projects.jsx';
 import Register from './Register.jsx';
 import Error from './Error.jsx';
 import Loading from './Loading.jsx';
+import QrCodes from './QrCodes.jsx';
 
 export {
     Layout,
     Home,
     Admin,
+    QrCodes,
     Github,
     Login,
     ProjectDetails,

@@ -25,6 +25,7 @@ import {
     Login,
     Register,
     ProjectDetails,
+    QrCodes
 } from './app/pages/pages.js';
 
 const router = createBrowserRouter(
@@ -39,6 +40,7 @@ const router = createBrowserRouter(
                 <Route path="login" element={<Login />} />
                 <Route path="register" element={<Register />} />
                 <Route path="admin" element={<Admin />} />
+                <Route path="qrcodes" element={<QrCodes />} />
             </Route>
 
             {/* Route for logged-in or public user profile pages */}
@@ -49,6 +51,7 @@ const router = createBrowserRouter(
                 <Route path="projects/:slug" element={<ProjectDetails />} />
                 <Route path="login" element={<Login />} />
                 <Route path="register" element={<Register />} />
+                <Route path="qrcodes" element={<QrCodes />} />
             </Route>
         </>,
     ),

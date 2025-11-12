@@ -42,8 +42,10 @@ function Login() {
             <main
                 className="
                     w-full flex items-start justify-center
-                    bg-zinc-50 dark:bg-zinc-950/80
-                    min-h-screen px-4 pt-32 pb-32 relative overflow-hidden
+                    bg-zinc-50 dark:bg-zinc-950
+                    bg-opacity-60 dark:bg-opacity-80
+                    min-h-screen px-4 pt-[150px] pb-32 relative overflow-hidden
+                    transition-all duration-300
                 "
                 aria-label="Login Page"
             >

@@ -72,7 +72,7 @@ function Header() {
             {/* Desktop navigation */}
             <div className="flex items-center transition-all duration-300">
                 <nav
-                    className="hidden md:flex flex-row items-center gap-8 transition-all duration-300"
+                    className="hidden md:flex flex-row items-center gap-7 transition-all duration-300"
                     aria-label="Main navigation"
                 >
                     <NavLink
@@ -80,7 +80,7 @@ function Header() {
                         end
                         className={({ isActive }) =>
                             (isActive ? '' : 'text-zinc-500 dark:text-zinc-400') +
-                            ' text-sm md:text-base font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300'
+                            ' text-sm md:text-base font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300 whitespace-nowrap'
                         }
                     >
                         Home
@@ -90,7 +90,7 @@ function Header() {
                         end
                         className={({ isActive }) =>
                             (isActive ? '' : 'text-zinc-500 dark:text-zinc-400') +
-                            ' text-sm md:text-base font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300'
+                            ' text-sm md:text-base font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300 whitespace-nowrap'
                         }
                     >
                         Projects
@@ -100,17 +100,27 @@ function Header() {
                         end
                         className={({ isActive }) =>
                             (isActive ? '' : 'text-zinc-500 dark:text-zinc-400') +
-                            ' text-sm md:text-base font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300'
+                            ' text-sm md:text-base font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300 whitespace-nowrap'
                         }
                     >
                         Github
+                    </NavLink>
+                    <NavLink
+                        to={`/qrcodes`}
+                        end
+                        className={({ isActive }) =>
+                            (isActive ? '' : 'text-zinc-500 dark:text-zinc-400') +
+                            ' text-sm md:text-base font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300 whitespace-nowrap'
+                        }
+                    >
+                        Qr Codes
                     </NavLink>
                     <NavLink
                         to={`/admin`}
                         end
                         className={({ isActive }) =>
                             (isActive ? '' : 'text-zinc-500 dark:text-zinc-400') +
-                            ' text-sm md:text-base font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300'
+                            ' text-sm md:text-base font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300 whitespace-nowrap'
                         }
                     >
                         Admin
@@ -152,7 +162,7 @@ function Header() {
                             end
                             className={({ isActive }) =>
                                 (isActive ? '' : 'text-zinc-500 dark:text-zinc-400') +
-                                ' text-sm md:text-base font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300'
+                                ' text-sm md:text-base font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300 whitespace-nowrap'
                             }
                             role="menuitem"
                             onClick={() => setMenuOpen(false)}
@@ -164,7 +174,7 @@ function Header() {
                             end
                             className={({ isActive }) =>
                                 (isActive ? '' : 'text-zinc-500 dark:text-zinc-400') +
-                                ' text-sm md:text-base font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300'
+                                ' text-sm md:text-base font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300 whitespace-nowrap'
                             }
                             role="menuitem"
                             onClick={() => setMenuOpen(false)}
@@ -176,7 +186,7 @@ function Header() {
                             end
                             className={({ isActive }) =>
                                 (isActive ? '' : 'text-zinc-500 dark:text-zinc-400') +
-                                ' text-sm md:text-base font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300'
+                                ' text-sm md:text-base font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300 whitespace-nowrap'
                             }
                             role="menuitem"
                             onClick={() => setMenuOpen(false)}
@@ -184,11 +194,23 @@ function Header() {
                             Github
                         </NavLink>
                         <NavLink
+                            to={`${basePath}/qrcodes`}
+                            end
+                            className={({ isActive }) =>
+                                (isActive ? '' : 'text-zinc-500 dark:text-zinc-400') +
+                                ' text-sm md:text-base font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300 whitespace-nowrap'
+                            }
+                            role="menuitem"
+                            onClick={() => setMenuOpen(false)}
+                        >
+                            Qr Codes
+                        </NavLink>
+                        <NavLink
                             to={`${basePath}/admin`}
                             end
                             className={({ isActive }) =>
                                 (isActive ? '' : 'text-zinc-500 dark:text-zinc-400') +
-                                ' text-sm md:text-base font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300'
+                                ' text-sm md:text-base font-semibold hover:text-zinc-600 dark:hover:text-zinc-300 transition-all duration-300 whitespace-nowrap'
                             }
                             role="menuitem"
                             onClick={() => setMenuOpen(false)}
