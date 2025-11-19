@@ -70,7 +70,7 @@ const distPath = path.join(__dirname, '../frontend/dist');
 app.use(express.static(distPath));
 
 // Serve index.html for all non-API routes
-app.get('*name', (req, res) => {
+app.get('/*', (req, res) => {
     if (req.path.startsWith('/api/')) {
         return res.status(404).json({ message: 'API route not found' });
     }
