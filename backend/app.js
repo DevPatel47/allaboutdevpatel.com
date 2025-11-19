@@ -66,7 +66,8 @@ app.use('/api/v1/contact', contactRoutes);
 app.use('/api/v1/github', githubRoutes);
 
 // Serve React dist folder for production
-const distPath = path.join(__dirname, '../frontend/dist');
+// const distPath = path.join(__dirname, '../frontend/dist');
+const distPath = path.resolve(process.cwd(), '../frontend/dist');
 app.use(express.static(distPath));
 
 // Serve index.html for all non-API routes
