@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { AnimatedBlurDots } from './components.js';
+import { formatDate } from '../utils/date.js';
 
 /**
  * Certifications Component
@@ -73,7 +74,7 @@ function Certifications({ certifications = [] }) {
                                 </p>
                                 <p className="text-meta mb-2 text-center md:text-left">
                                     {cert.issueDate &&
-                                        new Date(cert.issueDate).toLocaleDateString(undefined, {
+                                        formatDate(cert.issueDate, {
                                             year: 'numeric',
                                             month: 'short',
                                             day: 'numeric',

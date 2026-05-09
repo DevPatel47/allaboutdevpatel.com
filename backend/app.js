@@ -50,6 +50,7 @@ import testimonialRouter from './routes/portfolio/testimonial.routes.js';
 import portfolioRouter from './routes/portfolio/portfolio.routes.js';
 import contactRoutes from './routes/common/contact.routes.js';
 import githubRoutes from './routes/integrations/github.routes.js';
+import { errorHandler } from './middlewares/error.middleware.js';
 
 // Register API routes with versioned prefixes
 app.use('/api/v1/users', userRouter);
@@ -77,5 +78,7 @@ app.get('*name', (req, res) => {
     }
     res.sendFile(path.join(distPath, 'index.html'));
 });
+
+app.use(errorHandler);
 
 export { app };

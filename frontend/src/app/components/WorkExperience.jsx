@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { AnimatedBlurDots } from './components.js';
+import { formatDate } from '../utils/date.js';
 
 function WorkExperience({ experience = [] }) {
     if (!experience.length) return null;
@@ -64,10 +65,8 @@ function WorkExperience({ experience = [] }) {
                                     )}
                                 </p>
                                 <p className="text-meta mb-2 text-center md:text-left">
-                                    {new Date(exp.startDate).toLocaleDateString()} -{' '}
-                                    {exp.endDate
-                                        ? new Date(exp.endDate).toLocaleDateString()
-                                        : 'Present'}
+                                    {formatDate(exp.startDate)} -{' '}
+                                    {exp.endDate ? formatDate(exp.endDate) : 'Present'}
                                 </p>
                                 {Array.isArray(exp.responsibilities) &&
                                     exp.responsibilities.length > 0 && (

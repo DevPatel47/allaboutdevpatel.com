@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import GitHubService from '../services/integrations/github.service.js';
 import { BgImage } from '../components/components.js';
 import { Loading, Error } from './pages.js';
+import { formatDate } from '../utils/date.js';
 
 const SHOWCASE_USERNAME = 'devpatel47';
 
@@ -158,12 +159,8 @@ function GitHub() {
                                     <StatBadge label="Following" value={profile.following} />
                                 </div>
                                 <div className="mt-8 flex flex-col gap-1 text-meta">
-                                    <span>
-                                        Joined: {new Date(profile.created_at).toLocaleDateString()}
-                                    </span>
-                                    <span>
-                                        Updated: {new Date(profile.updated_at).toLocaleDateString()}
-                                    </span>
+                                    <span>Joined: {formatDate(profile.created_at)}</span>
+                                    <span>Updated: {formatDate(profile.updated_at)}</span>
                                     {profile.location && <span>Location: {profile.location}</span>}
                                     {profile.company && <span>Company: {profile.company}</span>}
                                 </div>

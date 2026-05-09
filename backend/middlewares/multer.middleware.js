@@ -1,4 +1,4 @@
-import multer from "multer";
+import multer from 'multer';
 
 /**
  * Multer storage configuration for handling file uploads.
@@ -7,17 +7,20 @@ import multer from "multer";
 const storage = multer.diskStorage({
     // Set destination directory for uploaded files
     destination: (req, file, cb) => {
-        cb(null, "./public/temp");
+        cb(null, './public/temp');
     },
     // Set filename for uploaded files (original name)
     filename: (req, file, cb) => {
         cb(null, file.originalname);
-    }
+    },
 });
 
 /**
  * Multer middleware instance for handling multipart/form-data (file uploads).
  */
 export const upload = multer({
-    storage
+    storage,
+    limits: {
+        fileSize: 5 * 1024 * 1024,
+    },
 });

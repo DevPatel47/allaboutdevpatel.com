@@ -11,6 +11,7 @@ import SocialLinkService from '../services/portfolio/socialLink.service.js';
 import TestimonialService from '../services/portfolio/testimonial.service.js';
 import { BgImage } from '../components/components.js';
 import { Loading } from './pages.js';
+import { formatDate } from '../utils/date.js';
 
 /* Service singletons (exported instances) */
 const introductionService = IntroductionService;
@@ -469,7 +470,7 @@ function Admin() {
         const [formState, setFormState] = useState(() => {
             const base = {};
             fields.forEach((f) => {
-                base[f.name] = f.type === 'file' ? null : entity[f.name] ?? '';
+                base[f.name] = f.type === 'file' ? null : (entity[f.name] ?? '');
             });
             return base;
         });
@@ -718,10 +719,8 @@ function Admin() {
                                         entity={item}
                                         lines={[
                                             `${item.institution} - ${item.degree}`,
-                                            `${new Date(item.startDate).toLocaleDateString()} → ${
-                                                item.endDate
-                                                    ? new Date(item.endDate).toLocaleDateString()
-                                                    : 'Present'
+                                            `${formatDate(item.startDate)} → ${
+                                                item.endDate ? formatDate(item.endDate) : 'Present'
                                             }`,
                                         ]}
                                         onDelete={() => handleDeleteEducation(item._id)}
@@ -813,10 +812,8 @@ function Admin() {
                                         entity={item}
                                         lines={[
                                             `${item.title} @ ${item.company}`,
-                                            `${new Date(item.startDate).toLocaleDateString()} → ${
-                                                item.endDate
-                                                    ? new Date(item.endDate).toLocaleDateString()
-                                                    : 'Present'
+                                            `${formatDate(item.startDate)} → ${
+                                                item.endDate ? formatDate(item.endDate) : 'Present'
                                             }`,
                                             item.techStack.join(', '),
                                         ]}
@@ -1056,7 +1053,7 @@ function Admin() {
                                         lines={[
                                             cert.title,
                                             cert.provider,
-                                            new Date(cert.issueDate).toLocaleDateString(),
+                                            formatDate(cert.issueDate),
                                         ]}
                                         onDelete={() => handleDeleteCertification(cert._id)}
                                         onBeginEdit={() => setEditCertificationId(cert._id)}
@@ -1350,9 +1347,7 @@ function Admin() {
                                                     </span>
                                                 </td>
                                                 <td className="px-3 py-2">
-                                                    {u.createdAt
-                                                        ? new Date(u.createdAt).toLocaleDateString()
-                                                        : '-'}
+                                                    {u.createdAt ? formatDate(u.createdAt) : '-'}
                                                 </td>
                                                 <td className="px-3 py-2">
                                                     <div className="flex gap-2 justify-end">

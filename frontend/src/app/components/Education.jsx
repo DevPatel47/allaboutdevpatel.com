@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import doodleImg from '../../assets/education-doodle.png';
 import { AnimatedBlurDots, RichText } from './components.js';
+import { formatDate } from '../utils/date.js';
 
 /**
  * Education Component
@@ -120,8 +121,7 @@ function Education({ education = [] }) {
                                         )}
                                     </p>
                                     <p className="text-meta mb-2 text-center md:text-left">
-                                        {new Date(edu.startDate).toLocaleDateString()} -{' '}
-                                        {new Date(edu.endDate).toLocaleDateString()}
+                                        {formatDate(edu.startDate)} - {formatDate(edu.endDate)}
                                         {edu.grade && (
                                             <>
                                                 {' '}

@@ -5,28 +5,30 @@
  * such as statusCode, errorMessage, errors array, and stack trace.
  */
 class ApiError extends Error {
-  /**
-   * Constructs a new ApiError instance.
-   * @param {number} statusCode - HTTP status code for the error.
-   * @param {string} [message="Something went wrong"] - Error message.
-   * @param {Array} [errors=[]] - Additional error details.
-   * @param {string} [stack=""] - Optional stack trace.
-   */
-  constructor(statusCode, message="Something went wrong", errors=[], stack="") {
-    super(message);
-    this.statusCode = statusCode;
-    this.data = null;
-    this.errorMessage = message;
-    this.success = false;
-    this.errors = errors;
+    /**
+     * Constructs a new ApiError instance.
+     * @param {number} statusCode - HTTP status code for the error.
+     * @param {string} [message="Something went wrong"] - Error message.
+     * @param {Array} [errors=[]] - Additional error details.
+     * @param {string} [stack=""] - Optional stack trace.
+     */
+    constructor(statusCode, message = 'Something went wrong', errors = [], stack = '') {
+        super(message);
+        this.statusCode = statusCode;
+        this.data = null;
+        this.message = message;
+        this.errorMessage = message;
+        this.success = false;
+        this.errors = errors;
+        this.name = 'ApiError';
 
-    // Set the stack trace for debugging
-    if (stack) {
-        this.stack = stack;
-    } else {
-        Error.captureStackTrace(this, this.constructor);
+        // Set the stack trace for debugging
+        if (stack) {
+            this.stack = stack;
+        } else {
+            Error.captureStackTrace(this, this.constructor);
+        }
     }
-  }
 }
 
 export { ApiError };
